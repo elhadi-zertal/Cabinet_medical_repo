@@ -1,1 +1,0 @@
-# Cabinet_medical_repo
