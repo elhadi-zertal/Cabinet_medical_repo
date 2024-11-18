@@ -39,7 +39,7 @@ public class Prescription {
     public String toString() {
         StringBuilder details = new StringBuilder();
         details.append("Prescription issued by Dr. ").append(doctorName).append("\n")
-               .append("For patient: ").append(patient.getName()).append(" (ID: ").append(patient.getgitId()).append(")\n")
+               .append("For patient: ").append(patient.getName()).append(" (ID: ").append(patient.getId()).append(")\n")
                .append("Issued on: ").append(issueDate).append(", Expiration: ").append(expirationDate).append("\n\n");
 
         details.append("Medications:\n");
