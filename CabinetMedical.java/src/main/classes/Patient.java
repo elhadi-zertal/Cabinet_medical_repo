@@ -1,4 +1,5 @@
 package main.classes;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -177,6 +178,66 @@ public String toString() {
 
 
 
+// Crud operations for the patient object
+
+    public class PatientManager {
+    private List<Patient> patients = new ArrayList<>();  // a list That containst patients with their infos
+    public void addPatient(Patient patient) {
+        patients.add(patient); // Adding a patient to the list 
+    }
+    
+    public  Patient getPatientById(String id){
+        for (Patient patient : patients) { 
+            if (patient.getId().equals(id)) //comparing The ID with the given id To see the patient 
+            {
+                return patient; // returning the patient if the id is found
+            }
+        }
+        return null;
+    }
+
+
+    // Updating an information of an patient by his id , Like date of rdv or medical history this function will give true when the change is done succesfuly and it will just change the guven data
+public boolean updatePatient(String id, String address, String contactInfo, String lastAppointmentDate,String nextAppointmentDate, List<String> medicalHistory, List<String> currentMedications, List<String> allergies) {
+for (Patient patient : patients) {
+if (patient.getId().equals(id)) {
+// Update only if new data is provided
+if (address != null) patient.setAddress(address);
+if (contactInfo != null) patient.setContactInfo(contactInfo);
+if (lastAppointmentDate != null) patient.setLastAppointmentDate(lastAppointmentDate);
+if (nextAppointmentDate != null) patient.setNextAppointmentDate(nextAppointmentDate);
+if (medicalHistory != null) patient.setMedicalHistory(medicalHistory);
+if (currentMedications != null) patient.setCurrentMedications(currentMedications);
+if (allergies != null) patient.setAllergies(allergies);
+return true; // Update was done successful
+}
+}
+return false; // when Patient not found
+}
+
+public void deletePatient(String id) { // deleting a patient by his id 
+    boolean Removed=patients.removeIf(patient-> patient.id.equals(id)); // removing the patient from the list if the id is found
+    if (Removed==true ) {
+        System.out.println("Patient removed");
+        
+    }else{
+        System.out.println("Patient not found");
+    }
+        
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+    }
 
 
    
@@ -195,11 +256,7 @@ public String toString() {
 
 
     
-             }
-
-
-
-
+             
 
 
 
