@@ -1,100 +1,72 @@
 package main.classes;
-import java.util.ArrayList;
-import java.util.List;
 
-public class Appointment {
-    public String family_name;    //family name of the patient
-    public String first_name;     //first name of the patient
-    public String address;        //address of the patient
-    public String ContactInfo;    //ContactInfo number
-    public int day;               //the day of the appointment
-    public int month;             //the month of the appointment
-    public int year;              //the year of the appointment
-    public int hour;              //the hour of the appointment
+public class Appointment extends Patient {
+    private int day; // The day of the appointment
+    private int month; // The month of the appointment
+    private int year; // The year of the appointment
+    private int hour; // The hour of the appointment
     private String appointmentId; // Unique ID for the appointment
-    static List<Appointment> scheduledAppointments = new ArrayList<>();  //list to store the appointments 
-
-    // Getter for scheduledAppointments
-    public static List<Appointment> getScheduledAppointments() {
-        return scheduledAppointments;
-    }
-
-     // Getter for appointmentId
-     public String getAppointmentId() {
-        return appointmentId;
-    }
-
 
     // Constructor for Appointment
-    public Appointment(String family_name, String first_name, String address, String ContactInfo, int day, int month, int year , int hour) {
-        this.family_name = family_name;
-        this.first_name = first_name;
-        this.address = address;
-        this.ContactInfo = ContactInfo;
+    public Appointment(String id, String name, int day, int month, int year, int hour) {
+        super(id, name, 0, "", 0, 0, "", "", "", "", null, null, null, "");
         this.day = day;
         this.month = month;
         this.year = year;
         this.hour = hour;
         this.appointmentId = generateAppointmentId(); // Generate unique ID
-    }  
+    }
 
     // Method to generate a unique appointment ID
     private String generateAppointmentId() {
-        return family_name + "_" + first_name + "_" + day + "-" + month + "-" + year + "_" + hour;
+        return getId() + "_" + day + "-" + month + "-" + year + "_" + hour;
     }
 
-
-    // Method to check if the appointment slot is free
-    public boolean is_free() {
-        for (Appointment x : scheduledAppointments){
-            if (
-                x.day == this.day &&
-                x.month == this.month &&
-                x.year == this.year &&
-                x.hour == this.hour
-            ) {
-                return false;  //slot is already booked
-            }
-        }
-        return true;   //slot is free
+    // Getters and Setters for Appointment's attributes
+    public int getDay() {
+        return day;
     }
 
-
-    public boolean addAppointment() {
-        if (this.is_free()) {
-            scheduledAppointments.add(this);  // Appointment successfully added
-            System.out.println("Appointment successfully added.");
-            return true;
-        } else {
-            System.out.println("Failed to add appointment: Slot is already booked.");
-            return false;
-        }
+    public void setDay(int day) {
+        this.day = day;
     }
 
-    // Method to cancel an appointment by ID
-    public static boolean cancelAppointment(String id) {
-        for (Appointment x : scheduledAppointments) {
-            if (x.getAppointmentId().equals(id)) {
-                scheduledAppointments.remove(x);
-                System.out.println("Appointment with ID " + id + " successfully canceled.");
-                return true;
-            }
-        }
-        System.out.println("No appointment found with ID: " + id);
-        return false;
+    public int getMonth() {
+        return month;
     }
 
+    public void setMonth(int month) {
+        this.month = month;
+    }
 
-    // toString() method for displaying appointment details
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public int getHour() {
+        return hour;
+    }
+
+    public void setHour(int hour) {
+        this.hour = hour;
+    }
+
+    public String getAppointmentId() {
+        return appointmentId;
+    }
+
+    public void setAppointmentId(String appointmentId) {
+        this.appointmentId = appointmentId;
+    }
+
+    // Overriding toString() to only display appointment date and ID
     @Override
     public String toString() {
-        return "Appointment ID: " + appointmentId + "\n" +
-               "Name: " + family_name + " " + first_name + "\n" +
-               "Address: " + address + "\n" +
-               "Contact Info: " + ContactInfo + "\n" +
-               "Date: " + day + "/" + month + "/" + year + " at " + hour + ":00";
+        return "Appointment ID: " + getAppointmentId()+ "\n" +
+               "Date: " + getDay() + "/" + getMonth() + "/" + getYear() + " at " + getHour() + ":00";
     }
-    
-
-
 }

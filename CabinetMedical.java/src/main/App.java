@@ -1,28 +1,24 @@
 package main;
 import main.classes.Appointment;
+import main.classes.AppointmentManager;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        // Create two appointments
-        Appointment appointment1 = new Appointment("Smith", "John", "123 Elm Street", "555-1234", 20, 11, 2024, 10);
-        Appointment appointment2 = new Appointment("Doe", "Jane", "456 Oak Street", "555-5678", 20, 11, 2024, 10);
+        // Creating a new appointment
+        Appointment appointment1 = new Appointment("P123", "John Doe", 20, 11, 2024, 10);
+        Appointment appointment2 = new Appointment("P124", "Jane Doe", 20, 11, 2024, 14);
 
-        // Add the first appointment
-        appointment1.addAppointment();
+        // Adding appointments using the AppointmentManager
+        AppointmentManager.addAppointment(appointment1);
+        AppointmentManager.addAppointment(appointment2);
 
-        // Attempt to add the second appointment at the same time slot
-        appointment2.addAppointment(); // Should fail because the slot is already booked
+        // Listing all scheduled appointments
+        AppointmentManager.listAppointments();
 
-        // Display scheduled appointments
-        System.out.println("Scheduled Appointments:");
-        for (Appointment a : Appointment.getScheduledAppointments()) {
-            System.out.println(a);
-        }
+        // Canceling an appointment
+        AppointmentManager.cancelAppointment(appointment1.getAppointmentId());
 
-        // Cancel the first appointment
-        Appointment.cancelAppointment(appointment1.getAppointmentId());
-
-        // Attempt to cancel a non-existent appointment
-        Appointment.cancelAppointment("NonExistentID");
+        // Listing appointments after cancellation
+        AppointmentManager.listAppointments();
     }
 }
