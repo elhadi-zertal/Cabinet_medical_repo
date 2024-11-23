@@ -8,8 +8,8 @@ public class Appointment extends Patient {
     private String appointmentId; // Unique ID for the appointment
 
     // Constructor for Appointment
-    public Appointment(String id, String name, int day, int month, int year, int hour) {
-        super(id, name, 0, "", 0, 0, "", "", "", "", null, null, null, "");
+    public Appointment(String id, String name, int age, String adress, String ContactInfo, int day, int month, int year, int hour) {
+        super(id, name, age, "", 0, 0, adress, ContactInfo, "", "", null, null, null, "");
         this.day = day;
         this.month = month;
         this.year = year;
@@ -66,7 +66,13 @@ public class Appointment extends Patient {
     // Overriding toString() to only display appointment date and ID
     @Override
     public String toString() {
-        return "Appointment ID: " + getAppointmentId()+ "\n" +
+        return "Id: " + getAppointmentId() + "\n" +
+               "Name: " + getName() + "\n" +
+               "Age: " + getAge() + "\n" +
+               "Address: " + getAddress() + "\n" +
+               "Contact Info: " + getContactInfo() + "\n" +
+               "Appointment ID: " + getAppointmentId() + "\n" +
                "Date: " + getDay() + "/" + getMonth() + "/" + getYear() + " at " + getHour() + ":00";
     }
+
 }
