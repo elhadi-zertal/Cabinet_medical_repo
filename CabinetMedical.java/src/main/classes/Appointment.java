@@ -1,15 +1,19 @@
 package main.classes;
 
+import javax.xml.crypto.dsig.spec.DigestMethodParameterSpec;
+
 public class Appointment extends Patient {
     private int day; // The day of the appointment
     private int month; // The month of the appointment
     private int year; // The year of the appointment
     private int hour; // The hour of the appointment
     private String appointmentId; // Unique ID for the appointment
+    private Doctor doctor; // Associate each appointment with a doctor
 
     // Constructor for Appointment
-    public Appointment(String id, String name, int age, String adress, String ContactInfo, int day, int month, int year, int hour) {
+    public Appointment(String id, String name, int age, String adress, String ContactInfo,Doctor doctor, int day, int month, int year, int hour) {
         super(id, name, age, "", 0, 0, adress, ContactInfo, "", "", null, null, null, "");
+        this.doctor = doctor;
         this.day = day;
         this.month = month;
         this.year = year;
@@ -72,6 +76,7 @@ public class Appointment extends Patient {
                "Address: " + getAddress() + "\n" +
                "Contact Info: " + getContactInfo() + "\n" +
                "Appointment ID: " + getAppointmentId() + "\n" +
+               "Doctor: " + doctor.getDoctorName() + " (" + doctor.getSpecialization() + ")\n" +
                "Date: " + getDay() + "/" + getMonth() + "/" + getYear() + " at " + getHour() + ":00";
     }
 

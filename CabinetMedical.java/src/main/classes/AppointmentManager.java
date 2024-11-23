@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AppointmentManager {
-    static List<Appointment> scheduledAppointments = new ArrayList<>(); // List to store the appointments
 
     // Method to check if the appointment slot is free
-    public static boolean isFree(Appointment appointment) {
-        for (Appointment x : scheduledAppointments) {
+    public static boolean isFree(Doctor doctor, Appointment appointment) {
+        for (Appointment x : doctor.getAppointments()) {
             if (x.getDay() == appointment.getDay() && x.getMonth() == appointment.getMonth() && 
                 x.getYear() == appointment.getYear() && x.getHour() == appointment.getHour()) {
                 return false; // Slot is already booked
@@ -18,9 +17,9 @@ public class AppointmentManager {
     }
 
     // Add appointment to the schedule
-    public static boolean addAppointment(Appointment appointment) {
-        if (isFree(appointment)) {
-            scheduledAppointments.add(appointment); // Appointment successfully added
+    public static boolean addAppointment(Doctor doctor, Appointment appointment) {
+        if (isFree(doctor, appointment)) {
+            doctor.getAppointments().add(appointment); // Appointment successfully added
             System.out.println("Appointment successfully added.");
             return true;
         } else {
@@ -30,10 +29,10 @@ public class AppointmentManager {
     }
 
     // Method to cancel an appointment by ID
-    public static boolean cancelAppointment(String appointmentId) {
-        for (Appointment x : scheduledAppointments) {
+    public static boolean cancelAppointment(Doctor doctor, String appointmentId) {
+        for (Appointment x : doctor.getAppointments()) {
             if (x.getAppointmentId().equals(appointmentId)) {
-                scheduledAppointments.remove(x);
+                doctor.getAppointments().remove(x);
                 System.out.println("Appointment with ID " + appointmentId + " successfully canceled.");
                 return true;
             }
@@ -43,11 +42,12 @@ public class AppointmentManager {
     }
 
     // Method to list all appointments
-    public static void listAppointments() {
-        if (scheduledAppointments.isEmpty()) {
+    public static void listAppointments(Doctor doctor) {
+        if (doctor.getAppointments().isEmpty()) {
             System.out.println("No scheduled appointments.");
         } else {
-            for (Appointment appointment : scheduledAppointments) {
+            System.out.println("Scheduled Appointments for " + doctor.getDoctorName() + ":");
+            for (Appointment appointment : doctor.getAppointments()) {
                 System.out.println(appointment);
             }
         }
