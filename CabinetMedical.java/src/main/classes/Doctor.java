@@ -3,13 +3,15 @@ package main.classes;
 public class Doctor {
     private String doctorId;
     private String doctorName;
-    private String specialization;
+    private String specialization,
+    private List<Appointment> appointments = new ArrayList<>(); // List to store appointments for this doctor;
 
     // Constructor
     public Doctor(String doctorId, String doctorName, String specialization) {
         this.doctorId = doctorId;
         this.doctorName = doctorName;
         this.specialization = specialization;
+        this.Appointment = Appointment;
     }
 
     // Getters and setters
@@ -35,6 +37,9 @@ public class Doctor {
 
     public void setSpecialization(String specialization) {
         this.specialization = specialization;
+    }
+    public List<Appointment> getAppointments() {
+        return appointments;
     }
 
     @Override
