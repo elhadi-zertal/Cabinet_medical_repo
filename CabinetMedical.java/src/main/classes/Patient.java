@@ -1,5 +1,6 @@
 package main.classes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Patient {
@@ -29,6 +30,12 @@ public class Patient {
     private List<String> allergies;
     private String bloodType;
 
+
+        // List to store appointments for this patient
+    @SuppressWarnings("FieldMayBeFinal")
+        private List<Appointment> appointments;
+
+
     // Constructor
     public Patient(String id, String name, int age, String gender, double height, double weight, String address,
             String contactInfo, String lastAppointmentDate, String nextAppointmentDate, List<String> medicalHistory,
@@ -48,9 +55,22 @@ public class Patient {
         this.allergies = allergies;
         this.bloodType = bloodType;
         this.doctorName = doctorName;
+         this.appointments = new ArrayList<>();
+    }
+
+
+    // Add an appointment to the patient
+    public void addAppointment(Appointment appointment) {
+        this.appointments.add(appointment);
     }
 
     // Getters and Setters
+
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
+
+
     public void setId(String id) {
         this.id = id;
     }
@@ -195,6 +215,7 @@ public class Patient {
                 + ", currentMedications=" + currentMedications
                 + ", allergies=" + allergies
                 + ", bloodType='" + bloodType + '\''
+                + ", appointments=" + appointments
                 + '}';
     }
 

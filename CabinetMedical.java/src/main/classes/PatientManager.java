@@ -7,6 +7,7 @@ import java.util.List;
 
 public class PatientManager {
 
+    @SuppressWarnings("FieldMayBeFinal")
     private List<Patient> patients = new ArrayList<>(); // A list to store patients and their information
 
     // Add a new patient to the list
@@ -71,4 +72,6 @@ public class PatientManager {
             System.out.println("Patient not found");
         }
     }
+
+    
 }
