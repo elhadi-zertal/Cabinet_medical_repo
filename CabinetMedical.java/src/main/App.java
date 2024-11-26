@@ -1,6 +1,7 @@
 package main;
 import main.classes.Appointment;
 import main.classes.AppointmentManager;
+import main.classes.Consultation;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -20,5 +21,9 @@ public class App {
 
         // Listing appointments after cancellation
         AppointmentManager.listAppointments();
+
+
+        // Create Consultation object for this Appointment (No hardcoded values)
+        Consultation consultation = new Consultation("", "", "", "", "", "", "", "", appointment);
     }
 }
