@@ -50,6 +50,6 @@ public class Doctor {
     public String toString() {
         return "Doctor: " + doctorName + " (ID: " + doctorId + "), Specialization: " + specialization + ", Appointments: " + appointments;
     }
-
+}
 
 

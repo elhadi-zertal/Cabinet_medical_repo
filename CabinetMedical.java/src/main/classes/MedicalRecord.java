@@ -6,7 +6,7 @@ import java.util.List;
 public class MedicalRecord {
     private String recordId;          // Unique ID for the medical record
     private Patient patient;          // Reference to the patient the record belongs to
-    private DOCTOR doctor;            // Reference to the doctor who created or updated the record
+    private Doctor doctor;            // Reference to the doctor who created or updated the record
     private List<String> diagnoses;   // List of diagnoses made during consultations
     private List<String> treatments;  // List of treatments prescribed or administered
     private List<String> allergies;   // List of known allergies for the patient
@@ -16,7 +16,7 @@ public class MedicalRecord {
     private String additionalNotes;   // Any additional notes or comments regarding the patient’s condition
 
     // Constructor
-    public MedicalRecord(String recordId, Patient patient, DOCTOR doctor, List<String> diagnoses,
+    public MedicalRecord(String recordId, Patient patient, Doctor doctor, List<String> diagnoses,
                          List<String> treatments, List<String> allergies, List<String> medicalHistory,
                          List<Prescription> prescriptions, Date recordDate, String additionalNotes) {
         this.recordId = recordId;
@@ -48,11 +48,11 @@ public class MedicalRecord {
         this.patient = patient;
     }
 
-    public DOCTOR getDoctor() {
+    public Doctor getDoctor() {
         return doctor;
     }
 
-    public void setDoctor(DOCTOR doctor) {
+    public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
     }
 
