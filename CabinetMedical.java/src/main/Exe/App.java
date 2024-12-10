@@ -1,5 +1,6 @@
 package main.Exe;
 import java.util.Scanner;
+import main.classes.PatientMenu;
 
     @SuppressWarnings("ConvertToTryWithResources")
 
@@ -34,7 +35,7 @@ public class App {
                     System.out.println("Gestion des Rendez-vous (à implémenter)");
                     break;
                 case 3:
-                    System.out.println("Gestion des Fiches Patients (à implémenter)");
+                PatientMenu.displayMenu();
                     break;
                 case 4:
                     System.out.println("Consulter le Dossier Médical (à implémenter)");
