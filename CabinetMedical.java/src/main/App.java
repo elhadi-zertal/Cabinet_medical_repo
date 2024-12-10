@@ -1,9 +1,9 @@
 package main;
-<<<<<<< HEAD
 import java.util.Scanner;
 import main.classes.Appointment;
 import main.classes.AppointmentManager;
 import main.classes.Consultation;
+    @SuppressWarnings("ConvertToTryWithResources")
 
 
 public class App {
