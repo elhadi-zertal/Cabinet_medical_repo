@@ -1,4 +1,4 @@
-package main;
+package main.Exe;
 import java.util.Scanner;
 
     @SuppressWarnings("ConvertToTryWithResources")
@@ -27,7 +27,7 @@ public class App {
         
             switch (choice) {
                 case 1:
-                
+
                     System.out.println("Gestion et Suivi du Dossier Médical (à implémenter)");
                     break;
                 case 2:
