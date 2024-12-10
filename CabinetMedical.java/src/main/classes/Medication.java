@@ -1,33 +1,48 @@
 package main.classes;
-
+import java.util.Objects;
 
 public class Medication {
-    private String name;
-    private String dosage;  // Dosage for this medication
-    private int duration;   // Duration in days
+    private final String name;
+    private final String dosage;
+    private final String frequency;
+    private final String duration;
+    private final String instructions;
 
-    // Constructor
-    public Medication(String name, String dosage, int duration) {
-        this.name = name;
-        this.dosage = dosage;
-        this.duration = duration;
+    public Medication(String name, String dosage, String frequency, String duration, String instructions) {
+        this.name = Objects.requireNonNull(name, "Medication name cannot be null");
+        this.dosage = Objects.requireNonNull(dosage, "Dosage cannot be null");
+        this.frequency = Objects.requireNonNull(frequency, "Frequency cannot be null");
+        this.duration = Objects.requireNonNull(duration, "Duration cannot be null");
+        this.instructions = instructions;
     }
 
-    // Getters
-    public String getName() {
-        return name;
-    }
-
-    public String getDosage() {
-        return dosage;
-    }
-
-    public int getDuration() {
-        return duration;
-    }
+    // Immutable getters
+    public String getName() { return name; }
+    public String getDosage() { return dosage; }
+    public String getFrequency() { return frequency; }
+    public String getDuration() { return duration; }
+    public String getInstructions() { return instructions; }
 
     @Override
     public String toString() {
-        return "Medication: " + name + ", Dosage: " + dosage + ", Duration: " + duration + " days";
+        return String.format("%s - %s, %s for %s%s", 
+            name, dosage, frequency, duration,
+            instructions != null ? " (" + instructions + ")" : "");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Medication)) return false;
+        Medication that = (Medication) o;
+        return Objects.equals(name, that.name) &&
+               Objects.equals(dosage, that.dosage) &&
+               Objects.equals(frequency, that.frequency) &&
+               Objects.equals(duration, that.duration);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, dosage, frequency, duration);
     }
 }
