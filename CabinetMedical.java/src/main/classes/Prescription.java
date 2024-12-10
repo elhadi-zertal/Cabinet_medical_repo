@@ -1,176 +1,244 @@
 package main.classes;
 
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Prescription {
-    private String prescriptionId;
+    private final String prescriptionId;
     private Doctor doctor;
     private Patient patient;
-    private List<String> medications;
-    private String dosage;
-    private String duration;
-    private Date prescriptionDate;
-    private Date validityDate;
-    private List<String> medicalExams;
+    private final Set<Medication> medications;
+    private LocalDateTime prescriptionDate;
+    private LocalDateTime validityDate;
+    private final List<String> medicalExams;
     private String additionalNotes;
 
-    // Constructor
-    public Prescription(String prescriptionId, Doctor doctor, Patient patient, List<String> medications, 
-                        String dosage, String duration, Date prescriptionDate, Date validityDate, 
-                        List<String> medicalExams, String additionalNotes) {
-        this.prescriptionId = prescriptionId;
-        this.doctor = doctor;
-        this.patient = patient;
-        this.medications = medications;
-        this.dosage = dosage;
-        this.duration = duration;
-        this.prescriptionDate = prescriptionDate;
-        this.validityDate = validityDate;
-        this.medicalExams = medicalExams;
-        this.additionalNotes = additionalNotes;
+    // Constructor with builder pattern
+    private Prescription(Builder builder) {
+        this.prescriptionId = Objects.requireNonNull(builder.prescriptionId, "Prescription ID cannot be null");
+        this.doctor = Objects.requireNonNull(builder.doctor, "Doctor cannot be null");
+        this.patient = Objects.requireNonNull(builder.patient, "Patient cannot be null");
+        this.medications = new LinkedHashSet<>(Objects.requireNonNull(builder.medications, "Medications cannot be null"));
+        this.prescriptionDate = Objects.requireNonNull(builder.prescriptionDate, "Prescription date cannot be null");
+        this.validityDate = Objects.requireNonNull(builder.validityDate, "Validity date cannot be null");
+        this.medicalExams = new ArrayList<>(Objects.requireNonNull(builder.medicalExams, "Medical exams cannot be null"));
+        this.additionalNotes = builder.additionalNotes;
     }
 
-    // Getters and setters
+    // Builder class
+    public static class Builder {
+        private final String prescriptionId;
+        private Doctor doctor;
+        private Patient patient;
+        private Set<Medication> medications = new LinkedHashSet<>();
+        private LocalDateTime prescriptionDate;
+        private LocalDateTime validityDate;
+        private List<String> medicalExams = new ArrayList<>();
+        private String additionalNotes;
+
+        public Builder(String prescriptionId) {
+            this.prescriptionId = prescriptionId;
+        }
+
+        public Builder doctor(Doctor doctor) {
+            this.doctor = doctor;
+            return this;
+        }
+
+        public Builder patient(Patient patient) {
+            this.patient = patient;
+            return this;
+        }
+
+        public Builder medications(Set<Medication> medications) {
+            this.medications = new LinkedHashSet<>(medications);
+            return this;
+        }
+
+        public Builder prescriptionDate(LocalDateTime prescriptionDate) {
+            this.prescriptionDate = prescriptionDate;
+            return this;
+        }
+
+        public Builder validityDate(LocalDateTime validityDate) {
+            this.validityDate = validityDate;
+            return this;
+        }
+
+        public Builder medicalExams(List<String> medicalExams) {
+            this.medicalExams = new ArrayList<>(medicalExams);
+            return this;
+        }
+
+        public Builder additionalNotes(String additionalNotes) {
+            this.additionalNotes = additionalNotes;
+            return this;
+        }
+
+        public Prescription build() {
+            return new Prescription(this);
+        }
+    }
+
+    // Getters
     public String getPrescriptionId() {
         return prescriptionId;
-    }
-
-    public void setPrescriptionId(String prescriptionId) {
-        this.prescriptionId = prescriptionId;
     }
 
     public Doctor getDoctor() {
         return doctor;
     }
 
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
-    }
-
     public Patient getPatient() {
         return patient;
     }
 
-    public void setPatient(Patient patient) {
-        this.patient = patient;
+    public Set<Medication> getMedications() {
+        return Collections.unmodifiableSet(medications);
     }
 
-    public List<String> getMedications() {
-        return medications;
-    }
-
-    public void setMedications(List<String> medications) {
-        this.medications = medications;
-    }
-
-    public String getDosage() {
-        return dosage;
-    }
-
-    public void setDosage(String dosage) {
-        this.dosage = dosage;
-    }
-
-    public String getDuration() {
-        return duration;
-    }
-
-    public void setDuration(String duration) {
-        this.duration = duration;
-    }
-
-    public Date getPrescriptionDate() {
+    public LocalDateTime getPrescriptionDate() {
         return prescriptionDate;
     }
 
-    public void setPrescriptionDate(Date prescriptionDate) {
-        this.prescriptionDate = prescriptionDate;
-    }
-
-    public Date getValidityDate() {
+    public LocalDateTime getValidityDate() {
         return validityDate;
     }
 
-    public void setValidityDate(Date validityDate) {
-        this.validityDate = validityDate;
-    }
-
     public List<String> getMedicalExams() {
-        return medicalExams;
-    }
-
-    public void setMedicalExams(List<String> medicalExams) {
-        this.medicalExams = medicalExams;
+        return Collections.unmodifiableList(medicalExams);
     }
 
     public String getAdditionalNotes() {
         return additionalNotes;
     }
 
+    // Setters with validation
+    public void setDoctor(Doctor doctor) {
+        this.doctor = Objects.requireNonNull(doctor, "Doctor cannot be null");
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = Objects.requireNonNull(patient, "Patient cannot be null");
+    }
+
+    public void setPrescriptionDate(LocalDateTime prescriptionDate) {
+        this.prescriptionDate = Objects.requireNonNull(prescriptionDate, "Prescription date cannot be null");
+    }
+
+    public void setValidityDate(LocalDateTime validityDate) {
+        this.validityDate = Objects.requireNonNull(validityDate, "Validity date cannot be null");
+    }
+
     public void setAdditionalNotes(String additionalNotes) {
         this.additionalNotes = additionalNotes;
     }
 
-    // Validate if doctor and patient exist
-    public boolean validateDoctorAndPatient(DoctorManager doctorManager, PatientManager patientManager) {
-        Doctor existingDoctor = doctorManager.getDoctorById(doctor.getDoctorId());
-        if (existingDoctor == null) {
-            System.out.println("Error: Doctor does not exist.");
-            return false;
-        }
+    // Medication Management Methods
+    public boolean addMedication(Medication medication) {
+        return Objects.requireNonNull(medication, "Medication cannot be null") != null 
+            && medications.add(medication);
+    }
 
-        Patient existingPatient = patientManager.getPatientById(patient.getId());
-        if (existingPatient == null) {
-            System.out.println("Error: Patient does not exist.");
-            return false;
-        }
+    public boolean removeMedication(Medication medication) {
+        return Objects.requireNonNull(medication, "Medication cannot be null") != null 
+            && medications.remove(medication);
+    }
 
-        return true;
+    public boolean addMedicalExam(String exam) {
+        return Objects.requireNonNull(exam, "Medical exam cannot be null") != null 
+            && medicalExams.add(exam);
+    }
+
+    public boolean removeMedicalExam(String exam) {
+        return Objects.requireNonNull(exam, "Medical exam cannot be null") != null 
+            && medicalExams.remove(exam);
+    }
+
+    // Optimized search methods using streams
+    public Optional<Medication> findMedicationByName(String name) {
+        Objects.requireNonNull(name, "Medication name cannot be null");
+        return medications.stream()
+                .filter(med -> med.getName().equalsIgnoreCase(name))
+                .findFirst();
+    }
+
+
+
+    // Validation Methods
+   
+
+    public boolean hasMedicationConflicts() {
+        return medications.size() != medications.stream()
+                .map(Medication::getName)
+                .collect(Collectors.toSet())
+                .size();
+    }
+
+    public boolean isValidPrescriptionPeriod() {
+        LocalDateTime now = LocalDateTime.now();
+        return prescriptionDate.isBefore(validityDate) && validityDate.isAfter(now);
+    }
+
+    // Utility Methods
+    public long getDaysUntilExpiration() {
+        return ChronoUnit.DAYS.between(LocalDateTime.now(), validityDate);
+    }
+
+    public String generatePrescriptionSummary() {
+        StringBuilder summary = new StringBuilder(256);
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
+        
+        summary.append("Prescription Summary for ").append(patient.getName())
+               .append("\nPrescribed by: Dr. ").append(doctor.getDoctorName())
+               .append("\nDate: ").append(prescriptionDate.format(dateFormatter))
+               .append("\nValid until: ").append(validityDate.format(dateFormatter))
+               .append("\n\nMedications:");
+        
+        medications.forEach(med -> summary.append("\n- ").append(med));
+        
+        if (!medicalExams.isEmpty()) {
+            summary.append("\n\nMedical Exams:");
+            medicalExams.forEach(exam -> summary.append("\n- ").append(exam));
+        }
+        
+        if (additionalNotes != null && !additionalNotes.isEmpty()) {
+            summary.append("\n\nAdditional Notes:\n").append(additionalNotes);
+        }
+        
+        return summary.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Prescription)) return false;
+        Prescription that = (Prescription) o;
+        return Objects.equals(prescriptionId, that.prescriptionId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(prescriptionId);
     }
 
     @Override
     public String toString() {
-        return "Prescription{" +
-                "prescriptionId='" + prescriptionId + '\'' +
-                ", doctor=" + doctor.getDoctorName() + " (" + doctor.getSpecialization() + ")" +
-                ", patient=" + patient.getName() + " (" + patient.getId() + ")" +
-                ", medications=" + medications +
-                ", dosage='" + dosage + '\'' +
-                ", duration='" + duration + '\'' +
-                ", prescriptionDate=" + prescriptionDate +
-                ", validityDate=" + validityDate +
-                ", medicalExams=" + medicalExams +
-                ", additionalNotes='" + additionalNotes + '\'' +
-                '}';
+        return new StringBuilder(128)
+            .append("Prescription{prescriptionId='").append(prescriptionId)
+            .append("', doctor=").append(doctor.getDoctorName())
+            .append(" (").append(doctor.getSpecialization()).append(')')
+            .append(", patient=").append(patient.getName())
+            .append(" (").append(patient.getId()).append(')')
+            .append(", medications=").append(medications)
+            .append(", prescriptionDate=").append(prescriptionDate)
+            .append(", validityDate=").append(validityDate)
+            .append(", medicalExams=").append(medicalExams)
+            .append(", additionalNotes='").append(additionalNotes).append('\'')
+            .append('}')
+            .toString();
     }
 }
-/*OUTPUT EXAMPLE
-
-Prescription issued by Dr. Smith
-
-For patient: John Doe (ID: P12345)
-
-Issued on: 2024-11-17, Expiration: 2024-12-17
-
-
-Medications:
-Medication: Aspirin, Dosage: 500mg, Duration: 5 days
-Medication: Paracetamol, Dosage: 650mg, Duration: 3 days
-Medication: Ibuprofen, Dosage: 200mg, Duration: 7 days
-Medical Exams:
-Exam Type: Blood Test
-Reason: Check cholesterol
-Recommended by: Dr. Smith
-Date: 2024-11-17
-Result: Normal
-Exam Type: X-ray
-Reason: Fracture in left arm
-Recommended by: Dr. Jones
-Date: 2024-11-17
-Result: Fracture detected */ 
-
-
-
-
- 
