@@ -1,6 +1,9 @@
 package main.classes;
 
+
 import java.util.Scanner;
+
+
 
 public class PatientMenu {
 
@@ -26,7 +29,8 @@ public class PatientMenu {
           // Perform an action based on the user's choice
           switch (choice) {
               case 1:
-                  //addPatient
+                  System.err.println("Adding the patient");
+               
                   break;
               case 2:
                   //updatePatient
