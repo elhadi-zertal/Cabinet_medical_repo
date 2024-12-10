@@ -1,8 +1,6 @@
 package main;
 import java.util.Scanner;
-import main.classes.Appointment;
-import main.classes.AppointmentManager;
-import main.classes.Consultation;
+
     @SuppressWarnings("ConvertToTryWithResources")
 
 
@@ -29,6 +27,7 @@ public class App {
         
             switch (choice) {
                 case 1:
+                
                     System.out.println("Gestion et Suivi du Dossier Médical (à implémenter)");
                     break;
                 case 2:

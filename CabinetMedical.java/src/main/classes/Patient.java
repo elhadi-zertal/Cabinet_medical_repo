@@ -15,7 +15,7 @@ public class Patient {
     private double height;
     private double weight;
 
-    // Contact informations
+    // Contact information
     private String address;
     private String contactInfo;
 
