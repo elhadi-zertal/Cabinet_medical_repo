@@ -1,83 +1,86 @@
 package main.classes;
 
-
 import java.util.ArrayList;
 import java.util.List;
-
-
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class DoctorManager {
-    private List<Doctor> doctors = new ArrayList<>();
+    private final Map<String, Doctor> doctors;
 
-    // Add a doctor to the system
-    public void addDoctor(Doctor doctor) {
-        if (doctorExists(doctor.getDoctorId(), doctor.getDoctorName())) {
-            System.out.println("Doctor with ID " + doctor.getDoctorId() + " (" + doctor.getDoctorName() + ") already exists.");
-        } else {
-            doctors.add(doctor);
-            System.out.println("Doctor " + doctor.getDoctorName() + " has been successfully added.");
-        }
+    public DoctorManager() {
+        this.doctors = new ConcurrentHashMap<>();
     }
 
-    // Retrieve a doctor by ID
-    public Doctor getDoctorById(String doctorId) {
-        for (Doctor doctor : doctors) {
-            if (doctor.getDoctorId().equals(doctorId)) {
-                return doctor;
-            }
-        }
-        return null;
+    public Doctor getDoctorById(String id) {
+        return doctors.get(id);
     }
-
-    // Retrieve a doctor by name
     public Doctor getDoctorByName(String doctorName) {
-        for (Doctor doctor : doctors) {
-            if (doctor.getDoctorName().equalsIgnoreCase(doctorName)) {
-                return doctor;
-            }
-        }
-        return null;
+        Objects.requireNonNull(doctorName, "Doctor name cannot be null");
+        return doctors.values().stream()
+                .filter(doctor -> doctor.getDoctorName().equalsIgnoreCase(doctorName.trim()))
+                .findFirst()
+                .orElse(null);}
+
+    public List<Doctor> getAllDoctors() {
+        return new ArrayList<>(doctors.values());
     }
 
-    // Check if a doctor exists by either ID or name
+    public List<Doctor> getDoctorsBySpecialty(String specialty) {
+        return doctors.values().stream()
+                .filter(doctor -> specialty.equals(doctor.getSpecialization()))
+                .collect(Collectors.toList());
+    }
+
+    public void addDoctor(Doctor doctor) {
+        if (doctor == null || doctor.getDoctorId() == null) {
+            throw new IllegalArgumentException("Invalid doctor data");
+        }
+        
+        doctors.put(doctor.getDoctorId(), doctor);
+    }
+     // Check if doctor exists by ID or name
     public boolean doctorExists(String doctorId, String doctorName) {
-        return doctors.stream()
-                .anyMatch(doctor -> doctor.getDoctorId().equals(doctorId) || doctor.getDoctorName().equalsIgnoreCase(doctorName));
+        if (doctorId != null && doctors.containsKey(doctorId)) {
+            return true;
+        }
+        if (doctorName != null) {
+            return doctors.values().stream()
+                    .anyMatch(doctor -> doctor.getDoctorName().equalsIgnoreCase(doctorName.trim()));
+        }
+                return false;
+    }
+    public boolean updateDoctor(String id, Doctor doctor) {
+        if (doctors.containsKey(id)) {
+            doctors.put(id, doctor);
+            return true;
+        }
+        return false;
+    }
+     
+    // Delete doctor
+    public boolean deleteDoctor(String doctorId) {
+        Objects.requireNonNull(doctorId, "Doctor ID cannot be null");
+        return doctors.remove(doctorId) != null;
     }
 
-    // Update doctor details
-    public void updateDoctor(String doctorId, String newDoctorName, String newSpecialization) {
-        Doctor doctor = getDoctorById(doctorId);
-        if (doctor != null) {
-            doctor.setDoctorName(newDoctorName);
-            doctor.setSpecialization(newSpecialization);
-            System.out.println("Doctor details updated successfully.");
-        } else {
-            System.out.println("Doctor with ID " + doctorId + " not found.");
-        }
+    // Optional: Method to get the total number of doctors
+    public int getDoctorCount() {
+        return doctors.size();
     }
-
-    // Remove a doctor from the system by ID
-    public void deleteDoctor(String doctorId) {
-        Doctor doctorToDelete = getDoctorById(doctorId);
-        if (doctorToDelete != null) {
-            doctors.remove(doctorToDelete);
-            System.out.println("Doctor with ID " + doctorId + " has been removed.");
-        } else {
-            System.out.println("Doctor with ID " + doctorId + " not found.");
-        }
+// List all doctors 
+public void listAllDoctors() {
+    if (doctors.isEmpty()) {
+        System.out.println("No doctors available.");
+        return;
     }
-
-    // List all doctors
-    public void listAllDoctors() {
-        if (doctors.isEmpty()) {
-            System.out.println("No doctors available.");
-        } else {
-            System.out.println("List of doctors:");
-            for (Doctor doctor : doctors) {
-                System.out.println(doctor);
-            }
-        }
+     System.out.println("List of doctors:");
+    doctors.values().forEach(System.out::println);}
+    // Optional: Method to clear all doctors (useful for testing)
+    public void clearAll() {
+        doctors.clear();
     }
 }
   
