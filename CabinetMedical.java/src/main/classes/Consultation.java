@@ -1,192 +1,169 @@
 package main.classes;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Consultation {
+    private final String consultationId;
+    private String diagnosis;
+    private List<String> treatments;
+    private List<Prescription> prescriptions;  
+    private MedicalRecord medicalRecord;            
+    private String followUp;
+    private List<ConsultationNote> notes;
+    private final Appointment appointment;
+    private final LocalDateTime consultationDateTime;
+    private ConsultationStatus status;
+    private double consultationFee;
 
-    private String consultationId; // Unique ID for consultation
-    private String diagnosis; // Diagnosis given during the consultation
-    private String treatment; // Treatment prescribed during the consultation
-    private String prescription; // Prescription given during the consultation
-    private String medicalHistory; // Medical history of the patient during consultation
-    private String allergies; // Allergies discovered during the consultation
-    private String followUp; // Follow-up advice or recommendation from the doctor
-    private String notes; // Additional notes from the doctor
-    private Appointment appointment; // Appointment object associated with the consultation
+    // Enum for consultation status
+    public enum ConsultationStatus {
+        SCHEDULED, IN_PROGRESS, COMPLETED, CANCELLED
+    }
 
-    // Constructor for Consultation
-    public Consultation(String consultationId, String diagnosis, String treatment, String prescription, 
-                        String medicalHistory, String allergies, String followUp, String notes, 
-                        Appointment appointment) {
-        this.consultationId = consultationId;
-        this.diagnosis = diagnosis;
-        this.treatment = treatment;
-        this.prescription = prescription;
-        this.medicalHistory = medicalHistory;
-        this.allergies = allergies;
-        this.followUp = followUp;
-        this.notes = notes;
+    // Simple note class - could be moved to a separate file if needed
+    public static class ConsultationNote {
+        private final String note;
+        private final LocalDateTime timestamp;
+        private final String authorName;
+
+        public ConsultationNote(String note, String authorName) {
+            this.note = note;
+            this.timestamp = LocalDateTime.now();
+            this.authorName = authorName;
+        }
+
+        // Getters
+        public String getNote() { return note; }
+        public LocalDateTime getTimestamp() { return timestamp; }
+        public String getAuthorName() { return authorName; }
+    }
+
+    // Constructor
+    public Consultation(Appointment appointment, MedicalRecord medicalRecord) {
+        this.consultationId = generateConsultationId();
         this.appointment = appointment;
+        this.medicalRecord = medicalRecord;
+        this.consultationDateTime = LocalDateTime.now();
+        this.status = ConsultationStatus.SCHEDULED;
+        
+        // Initialize collections
+        this.treatments = new ArrayList<>();
+        this.prescriptions = new ArrayList<>();
+        this.notes = new ArrayList<>();
     }
 
-    // getter and setter methods 
-    public String getConsultationId() {
-        return consultationId;
+    // Generate unique consultation ID
+    private String generateConsultationId() {
+        return "CONS-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
 
-    public void setConsultationId(String consultationId) {
-        this.consultationId = consultationId;
-    }
-
-    public String getDiagnosis() {
-        return diagnosis;
-    }
-
-    public void setDiagnosis(String diagnosis) {
-        this.diagnosis = diagnosis;
-    }
-
-    public String getTreatment() {
-        return treatment;
-    }
-
-    public void setTreatment(String treatment) {
-        this.treatment = treatment;
-    }
-
-    public String getPrescription() {
-        return prescription;
-    }
-
-    public void setPrescription(String prescription) {
-        this.prescription = prescription;
-    }
-
-    public String getMedicalHistory() {
-        return medicalHistory;
-    }
-
-    public void setMedicalHistory(String medicalHistory) {
-        this.medicalHistory = medicalHistory;
-    }
-
-    public String getAllergies() {
-        return allergies;
-    }
-
-    public void setAllergies(String allergies) {
-        this.allergies = allergies;
-    }
-
-    public String getFollowUp() {
-        return followUp;
-    }
-
-    public void setFollowUp(String followUp) {
-        this.followUp = followUp;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
-
-    public Appointment getAppointment() {
-        return appointment;
-    }
-
-    public void setAppointment(Appointment appointment) {
-        this.appointment = appointment;
-    }
-
-    // Method for the doctor to provide a diagnosis
+    // Enhanced method to provide diagnosis
     public void provideDiagnosis(String diagnosis) {
+        validateInput(diagnosis, "Diagnosis cannot be empty");
         this.diagnosis = diagnosis;
-        this.notes += "\nDiagnosis provided: " + diagnosis;
+        addNote("Diagnosis provided: " + diagnosis, getDoctorName());
+        medicalRecord.addDiagnosis(diagnosis);  // Update medical record
     }
 
-    // Method for the doctor to prescribe treatment
-    public void prescribeTreatment(String treatment) {
-        this.treatment = treatment;
-        this.notes += "\nTreatment prescribed: " + treatment;
+    // Enhanced method to add treatment
+    public void addTreatment(String treatment) {
+        validateInput(treatment, "Treatment cannot be empty");
+        this.treatments.add(treatment);
+        addNote("Treatment added: " + treatment, getDoctorName());
+        medicalRecord.addTreatment(treatment);  // Update medical record
     }
 
-    // Method for the doctor to prescribe medication
-    public void prescribeMedication(String medication) {
-        this.prescription = medication;
-        this.notes += "\nPrescription given: " + medication;
+    // Method to add prescription using existing Prescription class
+    public void addPrescription(Prescription prescription) {
+        if (prescription == null) {
+            throw new IllegalArgumentException("Prescription cannot be null");
+        }
+        this.prescriptions.add(prescription);
+        addNote("New prescription added: " + prescription.toString(), getDoctorName());
+        medicalRecord.addPrescription(prescription);  // Update medical record
     }
 
-    // Method for the doctor to update medical history based on the consultation
-    public void updateMedicalHistory(String medicalHistoryUpdate) {
-        this.medicalHistory += "\n" + medicalHistoryUpdate;
-        this.notes += "\nMedical history updated: " + medicalHistoryUpdate;
+    // Method to update medical history
+    public void updateMedicalHistory(String medicalHistoryEntry) {
+        validateInput(medicalHistoryEntry, "Medical history entry cannot be empty");
+        medicalRecord.addMedicalHistory(medicalHistoryEntry);
+        addNote("Medical history updated: " + medicalHistoryEntry, getDoctorName());
     }
 
-    // Method for the doctor to log allergies during the consultation
+    // Method to log allergy
     public void logAllergy(String allergy) {
-        this.allergies += "\n" + allergy;
-        this.notes += "\nAllergy recorded: " + allergy;
+        validateInput(allergy, "Allergy cannot be empty");
+        medicalRecord.addAllergy(allergy);
+        addNote("New allergy recorded: " + allergy, getDoctorName());
     }
 
-    // Method for the doctor to provide follow-up recommendations
-    public void provideFollowUp(String followUpRecommendation) {
-        this.followUp = followUpRecommendation;
-        this.notes += "\nFollow-up recommendation: " + followUpRecommendation;
+    // Method to add consultation notes
+    public void addNote(String note, String authorName) {
+        validateInput(note, "Note cannot be empty");
+        validateInput(authorName, "Author name cannot be empty");
+        this.notes.add(new ConsultationNote(note, authorName));
     }
 
-    // --- Methods to extract information from Appointment ---
-
-    public String getAppointmentDate() {
-        return appointment.getDay() + "/" + appointment.getMonth() + "/" + appointment.getYear();
+    // Method to start consultation
+    public void startConsultation() {
+        if (status != ConsultationStatus.SCHEDULED) {
+            throw new IllegalStateException("Consultation must be in SCHEDULED state to start");
+        }
+        status = ConsultationStatus.IN_PROGRESS;
+        addNote("Consultation started", getDoctorName());
     }
 
-    public String getAppointmentTime() {
-        return appointment.getHour() + ":00";
+    // Method to complete consultation
+    public void completeConsultation() {
+        if (status != ConsultationStatus.IN_PROGRESS) {
+            throw new IllegalStateException("Consultation must be in IN_PROGRESS state to complete");
+        }
+        status = ConsultationStatus.COMPLETED;
+        addNote("Consultation completed", getDoctorName());
     }
 
-    public String getDoctorName() {
-        return appointment.getDoctor().getDoctorName(); 
+    // Input validation method
+    private void validateInput(String input, String errorMessage) {
+        if (input == null || input.trim().isEmpty()) {
+            throw new IllegalArgumentException(errorMessage);
+        }
     }
 
-    public String getDoctorSpecialization() {
-        return appointment.getDoctor().getSpecialization(); 
+    // Method to get consultation summary
+    public String getConsultationSummary() {
+        StringBuilder summary = new StringBuilder();
+        summary.append("Consultation Summary\n");
+        summary.append("===================\n");
+        summary.append("ID: ").append(consultationId).append("\n");
+        summary.append("Date: ").append(consultationDateTime).append("\n");
+        summary.append("Doctor: ").append(getDoctorName()).append("\n");
+        summary.append("Patient: ").append(getPatientName()).append("\n");
+        summary.append("Status: ").append(status).append("\n");
+        summary.append("Diagnosis: ").append(diagnosis).append("\n");
+        // Add more summary information as needed
+        return summary.toString();
     }
 
-    public String getPatientName() {
-        return appointment.getName(); 
-    }
-
-    public String getPatientContactInfo() {
-        return appointment.getContactInfo(); 
-    }
-
-    public String getPatientId() {
-        return appointment.getId(); 
-    }
-
-    // Display consultation details along with extracted patient and appointment information
-    @Override
-    public String toString() {
-        return "Consultation{" +
-                "consultationId='" + consultationId + '\'' +
-                ", diagnosis='" + diagnosis + '\'' +
-                ", treatment='" + treatment + '\'' +
-                ", prescription='" + prescription + '\'' +
-                ", medicalHistory='" + medicalHistory + '\'' +
-                ", allergies='" + allergies + '\'' +
-                ", followUp='" + followUp + '\'' +
-                ", notes='" + notes + '\'' +
-                ", appointmentDate='" + getAppointmentDate() + '\'' +
-                ", appointmentTime='" + getAppointmentTime() + '\'' +
-                ", doctorName='" + getDoctorName() + '\'' +
-                ", doctorSpecialization='" + getDoctorSpecialization() + '\'' +
-                ", patientName='" + getPatientName() + '\'' +
-                ", patientId='" + getPatientId() + '\'' +
-                ", patientContactInfo='" + getPatientContactInfo() + '\'' +
-                '}';
-    }
+    // Getters
+    public String getConsultationId() { return consultationId; }
+    public String getDiagnosis() { return diagnosis; }
+    public List<String> getTreatments() { return new ArrayList<>(treatments); }
+    public List<Prescription> getPrescriptions() { return new ArrayList<>(prescriptions); }
+    public MedicalRecord getMedicalRecord() { return medicalRecord; }
+    public String getFollowUp() { return followUp; }
+    public List<ConsultationNote> getNotes() { return new ArrayList<>(notes); }
+    public Appointment getAppointment() { return appointment; }
+    public ConsultationStatus getStatus() { return status; }
+    public LocalDateTime getConsultationDateTime() { return consultationDateTime; }
+    
+    // Existing appointment-related methods
+    public String getAppointmentDate() { return appointment.getDay() + "/" + appointment.getMonth() + "/" + appointment.getYear(); }
+    public String getAppointmentTime() { return appointment.getHour() + ":00"; }
+    public String getDoctorName() { return appointment.getDoctorName(); }
+    public String getPatientName() { return appointment.getName(); }
+    public String getPatientContactInfo() { return appointment.getContactInfo(); }
+    public String getPatientId() { return appointment.getId(); }
 }
