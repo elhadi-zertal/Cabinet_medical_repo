@@ -1,7 +1,7 @@
 package main.classes;
 
-import java.util.List;
 import java.util.Date;
+import java.util.List;
 
 public class Prescription {
     private String prescriptionId;
@@ -113,7 +113,7 @@ public class Prescription {
     }
 
     // Validate if doctor and patient exist
-    public boolean validateDoctorAndPatient(DoctorMANAJER doctorManager, PatientManager patientManager) {
+    public boolean validateDoctorAndPatient(DoctorManager doctorManager, PatientManager patientManager) {
         Doctor existingDoctor = doctorManager.getDoctorById(doctor.getDoctorId());
         if (existingDoctor == null) {
             System.out.println("Error: Doctor does not exist.");

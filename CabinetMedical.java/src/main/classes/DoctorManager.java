@@ -6,7 +6,7 @@ import java.util.List;
 
 
 
-public class DoctorMANAJER {
+public class DoctorManager {
     private List<Doctor> doctors = new ArrayList<>();
 
     // Add a doctor to the system
