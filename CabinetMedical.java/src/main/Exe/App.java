@@ -1,5 +1,7 @@
 package main.Exe;
 import java.util.Scanner;
+
+import main.classes.AppointmentMenu;
 import main.classes.PatientMenu;
 
 public class App {
@@ -10,6 +12,8 @@ public class App {
         
         // Create an instance of PatientMenu
         PatientMenu patientMenu = new PatientMenu();
+        // Create an instance of AppointmentMenu
+        AppointmentMenu appointmentMenu = new AppointmentMenu();
         
         do {
             System.out.println("\n=== Medical Practice Management ===");
@@ -27,7 +31,7 @@ public class App {
 
             switch (choice) {
                 case 1 -> System.out.println("Medical Record Management (to be implemented)");
-                case 2 -> System.out.println("Appointment Management (to be implemented)");
+                case 2 -> appointmentMenu.displayMenu();
                 case 3 -> patientMenu.displayMenu();
                 case 4 -> System.out.println("View Medical Record (to be implemented)");
                 case 5 -> System.out.println("Write a Prescription (to be implemented)");
