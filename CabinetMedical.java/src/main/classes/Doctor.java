@@ -18,7 +18,7 @@ public final class Doctor {
     private final WorkSchedule workSchedule;
     private final AtomicInteger currentPatientCount;
     private static final int MAX_PATIENTS = 100;
-
+    private final List<Appointment> appointments;
     Object getSpecialty() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -104,6 +104,7 @@ public final class Doctor {
         this.contactInfo = Objects.requireNonNull(builder.contactInfo, "Contact info cannot be null");
         this.workSchedule = Objects.requireNonNull(builder.workSchedule, "Work schedule cannot be null");
         this.currentPatientCount = new AtomicInteger(0);
+        this.appointments = new ArrayList<>();
     }
 
     // Getters
@@ -121,6 +122,9 @@ public final class Doctor {
 
     public String getContactInfo() {
         return contactInfo;
+    }
+    public List<Appointment> getAppointments() {
+        return new ArrayList<>(appointments); 
     }
 
     public boolean isAvailableForAppointment(LocalDateTime dateTime, Duration duration) {
@@ -179,4 +183,13 @@ public final class Doctor {
     }
 }
 
+/*usage example 
+    Doctor doctor = new Doctor.Builder()
+    .doctorId("D123")
+    .doctorName("Dr. Smith")
+    .specialization("Cardiology")
+    .contactInfo("smith@hospital.com")
+    .workSchedule(new WorkSchedule())
+    .build();
+*/
 
