@@ -18,10 +18,8 @@ public class AppointmentManager {
     public static boolean addAppointment(Doctor doctor, Appointment appointment) {
         if (isFree(doctor, appointment)) {
             doctor.getAppointments().add(appointment); // Appointment successfully added
-            System.out.println("Appointment successfully added.");
             return true;
         } else {
-            System.out.println("Failed to add appointment: Slot is already booked.");
             return false;
         }
     }

@@ -1,9 +1,14 @@
 package main.Exe;
 import java.util.Scanner;
+<<<<<<< HEAD
 import main.classes.Consultation;
 import main.classes.MedicalRecord;
 import main.classes.MedicalRecordMenu;
 
+=======
+
+import main.classes.AppointmentMenu;
+>>>>>>> d23e3527adf1a6e69f32ecb43491398c2ece89b0
 import main.classes.PatientMenu;
 import main.classes.PrescriptionMenu;
 
@@ -15,6 +20,8 @@ public class App {
         
         // Create an instance of PatientMenu
         PatientMenu patientMenu = new PatientMenu();
+        // Create an instance of AppointmentMenu
+        AppointmentMenu appointmentMenu = new AppointmentMenu();
         
         do {
             System.out.println("\n=== Medical Practice Management ===");
@@ -32,8 +39,13 @@ public class App {
             scanner.nextLine(); // Consume the remaining newline
 
             switch (choice) {
+<<<<<<< HEAD
                 case 1 -> MedicalRecordMenu.displayMenu;
                 case 2 -> System.out.println("Appointment Management (to be implemented)");
+=======
+                case 1 -> System.out.println("Medical Record Management (to be implemented)");
+                case 2 -> appointmentMenu.displayMenu();
+>>>>>>> d23e3527adf1a6e69f32ecb43491398c2ece89b0
                 case 3 -> patientMenu.displayMenu();
                 case 4 -> ConsultationMenu.displayMenu();
                 case 5 -> PrescriptionMenu.displayMenu();

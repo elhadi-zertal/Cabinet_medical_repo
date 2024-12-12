@@ -1,18 +1,18 @@
 package main.classes;
 
-
-public class Appointment extends Patient {
+public class Appointment {
     private int day; // The day of the appointment
     private int month; // The month of the appointment
-    private int year; // The year of the appointmen
+    private int year; // The year of the appointment
     private int hour; // The hour of the appointment
     private String appointmentId; // Unique ID for the appointment
     private Doctor doctor; // Associate each appointment with a doctor
+    private Patient patient; // Associate each appointment with a patient
 
     // Constructor for Appointment
-    public Appointment(String id, String name, int age, String adress, String ContactInfo,Doctor doctor, int day, int month, int year, int hour) {
-        super(id, name, age, "", 0, 0, adress, ContactInfo, "", "", null, null, null, "", "");
+    public Appointment(Doctor doctor, Patient patient, int day, int month, int year, int hour) {
         this.doctor = doctor;
+        this.patient = patient;
         this.day = day;
         this.month = month;
         this.year = year;
@@ -22,7 +22,7 @@ public class Appointment extends Patient {
 
     // Method to generate a unique appointment ID
     private String generateAppointmentId() {
-        return getId() + "_" + day + "-" + month + "-" + year + "_" + hour;
+        return patient.getId() + "_" + day + "-" + month + "-" + year + "_" + hour;
     }
 
     // Getters and Setters for Appointment's attributes
@@ -66,17 +66,15 @@ public class Appointment extends Patient {
         this.appointmentId = appointmentId;
     }
 
-    // Overriding toString() to only display appointment date and ID
+    // Overriding toString().
     @Override
     public String toString() {
         return "Id: " + getAppointmentId() + "\n" +
-               "Name: " + getName() + "\n" +
-               "Age: " + getAge() + "\n" +
-               "Address: " + getAddress() + "\n" +
-               "Contact Info: " + getContactInfo() + "\n" +
-               "Appointment ID: " + getAppointmentId() + "\n" +
+               "Patient Name: " + patient.getName() + "\n" +
+               "Patient Age: " + patient.getAge() + "\n" +
+               "Patient Address: " + patient.getAddress() + "\n" +
+               "Patient Contact Info: " + patient.getContactInfo() + "\n" +
                "Doctor: " + doctor.getDoctorName() + " (" + doctor.getSpecialization() + ")\n" +
                "Date: " + getDay() + "/" + getMonth() + "/" + getYear() + " at " + getHour() + ":00";
     }
-
 }
