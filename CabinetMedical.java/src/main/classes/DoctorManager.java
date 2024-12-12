@@ -92,17 +92,13 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DoctorManager {
-    private final Map<String, Doctor> doctors;
-
-    public DoctorManager() {
-        this.doctors = new ConcurrentHashMap<>();
+    private static final Map<String, Doctor> doctors = new ConcurrentHashMap<>();
+    
+    public static Doctor getDoctorById(String doctorId) {
+        return doctors.get(doctorId);
     }
-
-    public Doctor getDoctorById(String id) {
-        return doctors.get(id);
-    }
-
-    public Doctor getDoctorByName(String doctorName) {
+    
+    public static Doctor getDoctorByName(String doctorName) {
         Objects.requireNonNull(doctorName, "Doctor name cannot be null");
         return doctors.values().stream()
                 .filter(doctor -> doctor.getDoctorName().equalsIgnoreCase(doctorName.trim()))
@@ -110,11 +106,11 @@ public class DoctorManager {
                 .orElse(null);
     }
 
-    public List<Doctor> getAllDoctors() {
+    public static List<Doctor> getAllDoctors() {
         return new ArrayList<>(doctors.values());
     }
 
-    public boolean doctorExists(String doctorId, String doctorName) {
+    public static boolean doctorExists(String doctorId, String doctorName) {
         if (doctorId != null && doctors.containsKey(doctorId)) {
             return true;
         }
@@ -125,7 +121,7 @@ public class DoctorManager {
         return false;
     }
 
-    public void addDoctor(Doctor doctor) {
+    public static void addDoctor(Doctor doctor) {
         if (doctor == null || doctor.getDoctorId() == null) {
             throw new IllegalArgumentException("Invalid doctor data");
         }
@@ -135,7 +131,7 @@ public class DoctorManager {
         doctors.put(doctor.getDoctorId(), doctor);
     }
 
-    public boolean updateDoctor(Doctor doctor) {
+    public static boolean updateDoctor(Doctor doctor) {
         if (doctor != null && doctor.getDoctorId() != null && doctors.containsKey(doctor.getDoctorId())) {
             doctors.put(doctor.getDoctorId(), doctor);
             return true;
@@ -143,7 +139,7 @@ public class DoctorManager {
         return false;
     }
 
-    public boolean deleteDoctor(String doctorId) {
+    public static boolean deleteDoctor(String doctorId) {
         Objects.requireNonNull(doctorId, "Doctor ID cannot be null");
         if (!doctors.containsKey(doctorId)) {
             return false;
@@ -152,21 +148,21 @@ public class DoctorManager {
         return true;
     }
 
-    public int getDoctorCount() {
+    public static int getDoctorCount() {
         return doctors.size();
     }
 
-    public void clearAll() {
+    public static void clearAll() {
         doctors.clear();
     }
-    // List all doctors 
-public void listAllDoctors() {
-    if (doctors.isEmpty()) {
-        System.out.println("No doctors available.");
-        return;
+
+    public static void listAllDoctors() {
+        if (doctors.isEmpty()) {
+            System.out.println("No doctors available.");
+            return;
+        }
+        System.out.println("List of doctors:");
+        doctors.values().forEach(System.out::println);
     }
-     System.out.println("List of doctors:");
-    doctors.values().forEach(System.out::println);}
-    // Optional: Method to clear all doctors (useful for testing)
-    
 }
+

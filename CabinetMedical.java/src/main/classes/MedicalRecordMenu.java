@@ -2,13 +2,11 @@
 package main.classes;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
 import java.util.function.Consumer;
-import main.classes.DoctorManager;
-import main.classes.MedicalRecord;
 
 
 
@@ -39,8 +37,7 @@ public class MedicalRecordMenu {
                     case 2 -> viewMedicalRecord();
                     case 3 -> updateMedicalRecord();
                     case 4 -> deleteMedicalRecord();
-                    case 5 -> listAllMedicalRecords();
-                    case 6 -> {
+                    case 5 -> {
                         return;
                     }
                     default -> System.out.println("Invalid choice! Please try again.");
@@ -53,58 +50,97 @@ public class MedicalRecordMenu {
     public String getName() {
         return "Medical Record Menu";
     }
-   
-     private void addMedicalRecord() {
+   private String generateUniqueRecordId() {
+    LocalDate currentDate = LocalDate.now();
+    String datePrefix = String.format("%d%02d%02d", 
+        currentDate.getYear(),
+        currentDate.getMonthValue(),
+        currentDate.getDayOfMonth());
+    
+    // Generate a shorter unique string using UUID
+    String uniquePart = UUID.randomUUID().toString()
+        .substring(0, 8)
+        .toUpperCase();
+    
+    return datePrefix + "-" + uniquePart;
+}
+
+    
+    private void addMedicalRecord() {
         try {
             System.out.println("\n=== Add New Medical Record ===");
             
-            // Get Patient ID
+            // Get and validate Patient
             System.out.print("Enter Patient ID: ");
             String patientId = scanner.nextLine().trim();
-            Patient patient = PatientManager.getPatientById(patientId);
-            if (patient == null) {
-                System.out.println("Patient not found!");
+            if (patientId.isEmpty()) {
+                System.out.println("Patient ID cannot be empty!");
                 return;
             }
-
-            // Get Doctor ID
+            
+            
+            // Get patient from the PatientManager instance
+        PatientManager patientManager = new PatientManager(); // Create instance
+        Patient patient = patientManager.getPatientById(patientId);
+        if (patient == null) {
+            System.out.println("Patient not found with ID: " + patientId);
+            return;
+        }
+            // Get and validate Doctor
             System.out.print("Enter Doctor ID: ");
             String doctorId = scanner.nextLine().trim();
-            Doctor doctor = DoctorManager.getDoctorById(doctorId);
-            if (doctor == null) {
-                System.out.println("Doctor not found!");
+            if (doctorId.isEmpty()) {
+                System.out.println("Doctor ID cannot be empty!");
                 return;
             }
-
-            // Generate unique record ID
-            String recordId = generateUniqueRecordId();
-
+            
+            Doctor doctor = DoctorManager.getDoctorById(doctorId);
+            if (doctor == null) {
+                System.out.println("Doctor not found with ID: " + doctorId);
+                return;
+            }
+    
             // Create new medical record
-            MedicalRecord newRecord = new MedicalRecord(recordId, patient, doctor);
-
-            // Add initial diagnosis
+            String recordId = generateUniqueRecordId();
+            
+            MedicalRecord newRecord = new MedicalRecord(
+                recordId,                // String recordId
+                patient,                 // Patient patient
+                doctor,                  // Doctor doctor
+                new ArrayList<>(),       // List<String> diagnoses
+                new ArrayList<>(),       // List<String> treatments
+                new ArrayList<>(),       // List<String> allergies
+                new ArrayList<>(),       // List<String> medicalHistory
+                new ArrayList<>(),       // List<String> surgicalHistory
+                new ArrayList<>(),       // List<Prescription> prescriptions
+                ""                       // String additionalNotes
+            );
+            
+            // Add diagnosis and treatment
             System.out.print("Enter initial diagnosis: ");
             String diagnosis = scanner.nextLine().trim();
             if (!diagnosis.isEmpty()) {
                 newRecord.addDiagnosis(diagnosis);
             }
-
-            // Add initial treatment
+    
             System.out.print("Enter initial treatment: ");
             String treatment = scanner.nextLine().trim();
             if (!treatment.isEmpty()) {
                 newRecord.addTreatment(treatment);
             }
-
-            // Add the record to the manager
+    
+            // Save the record
             recordManager.addMedicalRecord(newRecord);
-            System.out.println("Medical record added successfully!");
+            System.out.println("\nMedical record added successfully!");
             System.out.println("Record ID: " + recordId);
-
+    
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("Error adding medical record: " + e.getMessage());
+            System.out.println("An unexpected error occurred: " + e.getMessage());
         }
     }
+    
 
     
     private void updateMedicalRecord() {
@@ -256,49 +292,9 @@ public class MedicalRecordMenu {
     private boolean confirmDeletion() {
         System.out.print("Are you sure you want to delete this record? (y/n): ");
         return scanner.nextLine().trim().equalsIgnoreCase("y");
-    }
+    }}
 
-    private void listAllMedicalRecords() {
-        System.out.println("\n=== All Medical Records ===");
-        List<MedicalRecord> records = recordManager.getAllMedicalRecords();
-        
-        if (records.isEmpty()) {
-            System.out.println("No medical records found.");
-            return;
-        }
-
-        records.forEach(record -> {
-            System.out.println("\nRecord ID: " + record.getRecordId());
-            System.out.println("Patient: " + record.getPatient().getName() + 
-                             " (ID: " + record.getPatient().getId() + ")");
-            System.out.println("Doctor: " + record.getDoctor().getDoctorName() + 
-                             " (ID: " + record.getDoctor().getDoctorId() + ")");
-            System.out.println("Date: " + record.getRecordDate());
-            System.out.println("-----------------");
-        });
-    }
-
-    private String generateUniqueRecordId() {
-        // Generate a unique record ID (you might want to modify this based on your requirements)
-        String timestamp = String.valueOf(System.currentTimeMillis());
-        return "REC" + timestamp.substring(timestamp.length() - 6);
-    }
-
-    // Helper method to validate date format
-    private boolean isValidDateFormat(String date) {
-        try {
-            LocalDate.parse(date);
-            return true;
-        } catch (DateTimeParseException e) {
-            return false;
-        }
-    }
-}
-
-    private double getDoubleInput(String prompt) {
-        System.out.print(prompt);
-        return Double.parseDouble(scanner.nextLine().trim());
-    }
+    
 
 
 
