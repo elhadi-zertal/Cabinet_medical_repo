@@ -241,4 +241,127 @@ public class Prescription {
             .append('}')
             .toString();
     }
-}
+}/*package main.classes;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+public class Prescription {
+    private final String prescriptionId;
+    private final Patient patient;
+    private final Doctor doctor;
+    private final String medicationName;
+    private final String dosage;
+    private final String frequency;
+    private final String duration;
+    private final String specialInstructions;
+    private final LocalDateTime prescriptionDate;
+
+    public Prescription(String prescriptionId, 
+                       Patient patient, 
+                       Doctor doctor, 
+                       String medicationName,
+                       String dosage,
+                       String frequency,
+                       String duration,
+                       String specialInstructions,
+                       LocalDateTime prescriptionDate) {
+        // Validate required fields
+        if (patient == null || doctor == null) {
+            throw new IllegalArgumentException("Patient and Doctor cannot be null");
+        }
+        if (medicationName == null || medicationName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Medication name cannot be empty");
+        }
+        if (dosage == null || dosage.trim().isEmpty()) {
+            throw new IllegalArgumentException("Dosage cannot be empty");
+        }
+        if (frequency == null || frequency.trim().isEmpty()) {
+            throw new IllegalArgumentException("Frequency cannot be empty");
+        }
+        if (duration == null || duration.trim().isEmpty()) {
+            throw new IllegalArgumentException("Duration cannot be empty");
+        }
+
+        this.prescriptionId = prescriptionId;
+        this.patient = patient;
+        this.doctor = doctor;
+        this.medicationName = medicationName.trim();
+        this.dosage = dosage.trim();
+        this.frequency = frequency.trim();
+        this.duration = duration.trim();
+        this.specialInstructions = specialInstructions != null ? specialInstructions.trim() : "";
+        this.prescriptionDate = prescriptionDate != null ? prescriptionDate : LocalDateTime.now();
+    }
+
+    // Getters
+    public String getPrescriptionId() {
+        return prescriptionId;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public String getMedicationName() {
+        return medicationName;
+    }
+
+    public String getDosage() {
+        return dosage;
+    }
+
+    public String getFrequency() {
+        return frequency;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public String getSpecialInstructions() {
+        return specialInstructions;
+    }
+
+    public LocalDateTime getPrescriptionDate() {
+        return prescriptionDate;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\nPrescription Details:")
+          .append("\nID: ").append(prescriptionId)
+          .append("\nPatient: ").append(patient.getName())
+          .append("\nDoctor: ").append(doctor.getDoctorName())
+          .append("\nMedication: ").append(medicationName)
+          .append("\nDosage: ").append(dosage)
+          .append("\nFrequency: ").append(frequency)
+          .append("\nDuration: ").append(duration)
+          .append("\nDate: ").append(prescriptionDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
+
+        if (!specialInstructions.isEmpty()) {
+            sb.append("\nSpecial Instructions: ").append(specialInstructions);
+        }
+
+        return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Prescription that = (Prescription) o;
+        return prescriptionId.equals(that.prescriptionId);
+    }
+
+    @Override
+    public int hashCode() {
+        return prescriptionId.hashCode();
+    }
+}*/
+

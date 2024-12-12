@@ -1,131 +1,185 @@
 package main.classes;
 
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 public class MedicalRecord {
-    private String recordId;          // Unique ID for the medical record
-    private Patient patient;          // Reference to the patient the record belongs to
-    private Doctor doctor;            // Reference to the doctor who created or updated the record
-    private List<String> diagnoses;   // List of diagnoses made during consultations
-    private List<String> treatments;  // List of treatments prescribed or administered
-    private List<String> allergies;   // List of known allergies for the patient
-    private List<String> medicalHistory;  // List of past medical conditions
-    private List<String> surgicalHistory; // List of past surgeries and operations
-    private List<Prescription> prescriptions;  // List of prescriptions related to the patient
-    private Date recordDate;          // Date when the record was created or updated
-    private String additionalNotes;   // Any additional notes or comments regarding the patient's condition
+    private final String recordId;
+    private final Patient patient;
+    private final Doctor doctor;
+    private final List<String> diagnoses;
+    private final List<String> treatments;
+    private final List<String> allergies;
+    private final List<String> medicalHistory;
+    private final List<String> surgicalHistory;
+    private final List<Prescription> prescriptions;
+    private String additionalNotes;
+    private final LocalDateTime recordDate;
+    private VitalSigns vitalSigns;
 
-    // Constructor
-    public MedicalRecord(String recordId, Patient patient, Doctor doctor, List<String> diagnoses,
-            List<String> treatments, List<String> allergies, List<String> medicalHistory,
-            List<String> surgicalHistory, List<Prescription> prescriptions, String additionalNotes) {
-        this.recordId = recordId;
-        this.patient = patient;
-        this.doctor = doctor;
-        this.diagnoses = diagnoses != null ? diagnoses : new ArrayList<>();
-        this.treatments = treatments != null ? treatments : new ArrayList<>();
-        this.allergies = allergies != null ? allergies : new ArrayList<>();
-        this.medicalHistory = medicalHistory != null ? medicalHistory : new ArrayList<>();
-        this.surgicalHistory = surgicalHistory != null ? surgicalHistory : new ArrayList<>();
-        this.prescriptions = prescriptions != null ? prescriptions : new ArrayList<>();
-        this.additionalNotes = additionalNotes;
-        this.recordDate = new Date();
+    public MedicalRecord(String recordId, Patient patient, Doctor doctor,
+                        List<String> diagnoses, List<String> treatments,
+                        List<String> allergies, List<String> medicalHistory,
+                        List<String> surgicalHistory, List<Prescription> prescriptions,
+                        String additionalNotes) {
+        this.recordId = Objects.requireNonNull(recordId, "Record ID cannot be null");
+        this.patient = Objects.requireNonNull(patient, "Patient cannot be null");
+        this.doctor = Objects.requireNonNull(doctor, "Doctor cannot be null");
+        this.diagnoses = new ArrayList<>(diagnoses != null ? diagnoses : new ArrayList<>());
+        this.treatments = new ArrayList<>(treatments != null ? treatments : new ArrayList<>());
+        this.allergies = new ArrayList<>(allergies != null ? allergies : new ArrayList<>());
+        this.medicalHistory = new ArrayList<>(medicalHistory != null ? medicalHistory : new ArrayList<>());
+        this.surgicalHistory = new ArrayList<>(surgicalHistory != null ? surgicalHistory : new ArrayList<>());
+        this.prescriptions = new ArrayList<>(prescriptions != null ? prescriptions : new ArrayList<>());
+        this.additionalNotes = additionalNotes != null ? additionalNotes : "";
+        this.recordDate = LocalDateTime.now();
+        this.vitalSigns = new VitalSigns();
     }
 
-    // Method to add a prescription to the medical record
-    public void addPrescription(Prescription prescription) {
-        prescriptions.add(prescription);
-        recordDate = new Date();
+    // Getters
+    public String getRecordId() {
+        return recordId;
     }
 
-    // Method to add a diagnosis to the medical record
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public List<String> getDiagnoses() {
+        return new ArrayList<>(diagnoses);
+    }
+
+    public List<String> getTreatments() {
+        return new ArrayList<>(treatments);
+    }
+
+    public List<String> getAllergies() {
+        return new ArrayList<>(allergies);
+    }
+
+    public List<String> getMedicalHistory() {
+        return new ArrayList<>(medicalHistory);
+    }
+
+    public List<String> getSurgicalHistory() {
+        return new ArrayList<>(surgicalHistory);
+    }
+
+    public List<Prescription> getPrescriptions() {
+        return new ArrayList<>(prescriptions);
+    }
+
+    public String getAdditionalNotes() {
+        return additionalNotes;
+    }
+
+    public String getRecordDate() {
+        return recordDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+    }
+
+    // Add methods
     public void addDiagnosis(String diagnosis) {
-        diagnoses.add(diagnosis);
-        recordDate = new Date();
-    }
-
-    // Method to add a treatment to the medical record
-    public void addTreatment(String treatment) {
-        treatments.add(treatment);
-        recordDate = new Date();
-    }
-
-    // Method to add a medical history item
-    public void addMedicalHistory(String historyItem) {
-        medicalHistory.add(historyItem);
-        recordDate = new Date();
-    }
-
-    // Method to add surgical history
-    public void addSurgicalHistory(String surgeryDetails) {
-        surgicalHistory.add(surgeryDetails);
-        recordDate = new Date();
-    }
-
-    // Method to add an allergy to the medical record
-    public void addAllergy(String allergy) {
-        allergies.add(allergy);
-        recordDate = new Date();
-    }
-
-    // Method to track patient vital signs
-    public void updateVitalSigns(double weight, double height, String bloodPressure, 
-            double temperature, String additionalMetrics) {
-        StringBuilder vitalInfo = new StringBuilder();
-        vitalInfo.append("Vital Signs Update:\n")
-                .append("Weight: ").append(weight).append(" kg\n")
-                .append("Height: ").append(height).append(" cm\n")
-                .append("Blood Pressure: ").append(bloodPressure).append("\n")
-                .append("Temperature: ").append(temperature).append("°C");
-        
-        if (additionalMetrics != null && !additionalMetrics.isEmpty()) {
-            vitalInfo.append("\nAdditional Metrics: ").append(additionalMetrics);
+        if (diagnosis != null && !diagnosis.trim().isEmpty()) {
+            diagnoses.add(diagnosis.trim());
         }
-        
-        additionalNotes += "\n" + vitalInfo.toString();
-        recordDate = new Date();
     }
 
-    // Standard getters and setters
-    public String getRecordId() { return recordId; }
-    public void setRecordId(String recordId) { this.recordId = recordId; }
-    public Patient getPatient() { return patient; }
-    public void setPatient(Patient patient) { this.patient = patient; }
-    public Doctor getDoctor() { return doctor; }
-    public void setDoctor(Doctor doctor) { this.doctor = doctor; }
-    public List<String> getDiagnoses() { return diagnoses; }
-    public void setDiagnoses(List<String> diagnoses) { this.diagnoses = diagnoses; }
-    public List<String> getTreatments() { return treatments; }
-    public void setTreatments(List<String> treatments) { this.treatments = treatments; }
-    public List<String> getAllergies() { return allergies; }
-    public void setAllergies(List<String> allergies) { this.allergies = allergies; }
-    public List<String> getMedicalHistory() { return medicalHistory; }
-    public void setMedicalHistory(List<String> medicalHistory) { this.medicalHistory = medicalHistory; }
-    public List<String> getSurgicalHistory() { return surgicalHistory; }
-    public void setSurgicalHistory(List<String> surgicalHistory) { this.surgicalHistory = surgicalHistory; }
-    public List<Prescription> getPrescriptions() { return prescriptions; }
-    public void setPrescriptions(List<Prescription> prescriptions) { this.prescriptions = prescriptions; }
-    public Date getRecordDate() { return recordDate; }
-    public void setRecordDate(Date recordDate) { this.recordDate = recordDate; }
-    public String getAdditionalNotes() { return additionalNotes; }
-    public void setAdditionalNotes(String additionalNotes) { this.additionalNotes = additionalNotes; }
+    public void addTreatment(String treatment) {
+        if (treatment != null && !treatment.trim().isEmpty()) {
+            treatments.add(treatment.trim());
+        }
+    }
+
+    public void addAllergy(String allergy) {
+        if (allergy != null && !allergy.trim().isEmpty()) {
+            allergies.add(allergy.trim());
+        }
+    }
+
+    public void addMedicalHistory(String historyItem) {
+        if (historyItem != null && !historyItem.trim().isEmpty()) {
+            medicalHistory.add(historyItem.trim());
+        }
+    }
+
+    public void addSurgicalHistory(String surgeryItem) {
+        if (surgeryItem != null && !surgeryItem.trim().isEmpty()) {
+            surgicalHistory.add(surgeryItem.trim());
+        }
+    }
+
+    public void addPrescription(Prescription prescription) {
+        if (prescription != null) {
+            prescriptions.add(prescription);
+        }
+    }
+
+    public void setAdditionalNotes(String notes) {
+        this.additionalNotes = notes != null ? notes : "";
+    }
+
+    public void updateVitalSigns(double weight, double height, String bloodPressure, 
+                                double temperature, String additionalMetrics) {
+        this.vitalSigns = new VitalSigns(weight, height, bloodPressure, temperature, additionalMetrics);
+    }
 
     @Override
     public String toString() {
-        return "MedicalRecord{" +
-                "recordId='" + recordId + '\'' +
-                ", patient=" + patient.getName() + " (" + patient.getId() + ")" +
-                ", doctor=" + doctor.getDoctorName() + " (" + doctor.getSpecialization() + ")" +
-                ", diagnoses=" + diagnoses +
-                ", treatments=" + treatments +
-                ", allergies=" + allergies +
-                ", medicalHistory=" + medicalHistory +
-                ", surgicalHistory=" + surgicalHistory +
-                ", prescriptions=" + prescriptions +
-                ", recordDate=" + recordDate +
-                ", additionalNotes='" + additionalNotes + '\'' +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append("Medical Record ID: ").append(recordId)
+          .append("\nDate: ").append(getRecordDate())
+          .append("\nPatient: ").append(patient.getName())
+          .append("\nDoctor: ").append(doctor.getDoctorName())
+          .append("\n\nDiagnoses: ").append(String.join(", ", diagnoses))
+          .append("\nTreatments: ").append(String.join(", ", treatments))
+          .append("\nAllergies: ").append(String.join(", ", allergies))
+          .append("\nMedical History: ").append(String.join(", ", medicalHistory))
+          .append("\nSurgical History: ").append(String.join(", ", surgicalHistory))
+          .append("\n\nVital Signs: ").append(vitalSigns)
+          .append("\n\nAdditional Notes: ").append(additionalNotes);
+        
+        if (!prescriptions.isEmpty()) {
+            sb.append("\n\nPrescriptions:");
+            prescriptions.forEach(prescription -> 
+                sb.append("\n- ").append(prescription));
+        }
+        
+        return sb.toString();
+    }
+
+    // Inner class for Vital Signs
+    private static class VitalSigns {
+        private double weight;
+        private double height;
+        private String bloodPressure;
+        private double temperature;
+        private String additionalMetrics;
+
+        public VitalSigns() {
+            // Default constructor with empty values
+        }
+
+        public VitalSigns(double weight, double height, String bloodPressure, 
+                         double temperature, String additionalMetrics) {
+            this.weight = weight;
+            this.height = height;
+            this.bloodPressure = bloodPressure;
+            this.temperature = temperature;
+            this.additionalMetrics = additionalMetrics;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("Weight: %.1f kg, Height: %.1f cm, BP: %s, Temp: %.1f°C%s",
+                weight, height, bloodPressure, temperature,
+                additionalMetrics.isEmpty() ? "" : ", Additional: " + additionalMetrics);
+        }
     }
 }

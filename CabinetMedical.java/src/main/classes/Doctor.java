@@ -19,9 +19,6 @@ public final class Doctor {
     private final AtomicInteger currentPatientCount;
     private static final int MAX_PATIENTS = 100;
     private final List<Appointment> appointments;
-    Object getSpecialty() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
     public static class WorkSchedule {
         private final Map<DayOfWeek, List<TimeSlot>> weeklySchedule;
@@ -123,23 +120,25 @@ public final class Doctor {
     public String getContactInfo() {
         return contactInfo;
     }
+
+    public WorkSchedule getWorkSchedule() {
+        return workSchedule;
+    }
+
     public List<Appointment> getAppointments() {
-        return new ArrayList<>(appointments); 
+        return new ArrayList<>(appointments);
     }
 
     public boolean isAvailableForAppointment(LocalDateTime dateTime, Duration duration) {
-        // Check if within working hours
         if (!workSchedule.isWithinWorkingHours(dateTime)) {
             return false;
         }
 
-        // Check if appointment end time is within working hours
         LocalDateTime endTime = dateTime.plus(duration);
         if (!workSchedule.isWithinWorkingHours(endTime)) {
             return false;
         }
 
-        // Check patient limit
         return currentPatientCount.get() < MAX_PATIENTS;
     }
 
@@ -181,7 +180,18 @@ public final class Doctor {
     public int hashCode() {
         return Objects.hash(doctorId);
     }
+
+    @Override
+    public String toString() {
+        return "Doctor{" +
+               "doctorId='" + doctorId + '\'' +
+               ", doctorName='" + doctorName + '\'' +
+               ", specialization='" + specialization + '\'' +
+               ", contactInfo='" + contactInfo + '\'' +
+               '}';
+    }
 }
+
 
 /*usage example 
     Doctor doctor = new Doctor.Builder()

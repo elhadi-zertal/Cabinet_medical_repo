@@ -1,6 +1,11 @@
 package main.Exe;
 import java.util.Scanner;
+import main.classes.Consultation;
+import main.classes.MedicalRecord;
+import main.classes.MedicalRecordMenu;
+
 import main.classes.PatientMenu;
+import main.classes.PrescriptionMenu;
 
 public class App {
     @SuppressWarnings("resource")
@@ -13,26 +18,28 @@ public class App {
         
         do {
             System.out.println("\n=== Medical Practice Management ===");
-            System.out.println("1. Medical Record Management");
-            System.out.println("2. Appointment Management");
-            System.out.println("3. Patient Records Management");
-            System.out.println("4. View Medical Record");
-            System.out.println("5. Write a Prescription");
+            System.out.println("1. Medical Record Management Menu");
+            System.out.println("2. Appointment Management Menu");
+            System.out.println("3. Patient Records Management Menu");
+            System.out.println("4. Consultation Menu");
+            System.out.println("5. Prescription Management Menu ");
             System.out.println("6. Manage Medical Certificates");
-            System.out.println("7. Exit");
+            System.out.println("7. doctor Menu");
+            System.out.println("8. Exit");
             System.out.print("Enter your choice: ");
 
             choice = scanner.nextInt();
             scanner.nextLine(); // Consume the remaining newline
 
             switch (choice) {
-                case 1 -> System.out.println("Medical Record Management (to be implemented)");
+                case 1 -> MedicalRecordMenu.displayMenu;
                 case 2 -> System.out.println("Appointment Management (to be implemented)");
                 case 3 -> patientMenu.displayMenu();
-                case 4 -> System.out.println("View Medical Record (to be implemented)");
-                case 5 -> System.out.println("Write a Prescription (to be implemented)");
+                case 4 -> ConsultationMenu.displayMenu();
+                case 5 -> PrescriptionMenu.displayMenu();
                 case 6 -> System.out.println("Manage Medical Certificates (to be implemented)");
-                case 7 -> System.out.println("System shutting down. Goodbye!");
+                case 7 -> DoctorMenu.displayMenu();
+                case 8 -> System.out.println("System shutting down. Goodbye!");
                 default -> System.out.println("Invalid choice! Please try again.");
             }
         } while (choice != 7);
