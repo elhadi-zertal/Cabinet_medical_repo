@@ -16,7 +16,13 @@ public class DoctorMenu {
         }
         return doctorManager.getDoctorByName(doctorName);
     }
-
+     public static Doctor findDoctorById(String doctorId, DoctorManager doctorManager) {
+         if (doctorId == null || doctorId.trim().isEmpty() || doctorManager == null) {
+             return null;
+         }
+         return doctorManager.getDoctorById(doctorId);
+     }
+     
     // Instance method for internal use
     private Doctor findDoctorByName(String doctorName) {
         return doctorManager.getDoctorByName(doctorName);

@@ -1,16 +1,6 @@
 package main.Exe;
 import java.util.Scanner;
-
-import main.classes.Consultation;
-import main.classes.MedicalRecord;
-import main.classes.MedicalRecordMenu;
-
-
-
-import main.classes.AppointmentMenu;
-
-import main.classes.PatientMenu;
-import main.classes.PrescriptionMenu;
+import main.classes.*;
 
 public class App {
     @SuppressWarnings("resource")
@@ -18,10 +8,14 @@ public class App {
         Scanner scanner = new Scanner(System.in);
         int choice;
         
-        // Create an instance of PatientMenu
+        // Create instances of all menu classes
         PatientMenu patientMenu = new PatientMenu();
-        // Create an instance of AppointmentMenu
         AppointmentMenu appointmentMenu = new AppointmentMenu();
+        MedicalRecordManager recordManager = new MedicalRecordManager();
+        MedicalRecordMenu medicalRecordMenu = new MedicalRecordMenu(scanner, recordManager);
+        ConsultationMenu consultationMenu = new ConsultationMenu(new Consultation());
+        PrescriptionMenu prescriptionMenu = new PrescriptionMenu();
+        DoctorMenu doctorMenu = new DoctorMenu();
         
         do {
             System.out.println("\n=== Medical Practice Management ===");
@@ -29,9 +23,9 @@ public class App {
             System.out.println("2. Appointment Management Menu");
             System.out.println("3. Patient Records Management Menu");
             System.out.println("4. Consultation Menu");
-            System.out.println("5. Prescription Management Menu ");
+            System.out.println("5. Prescription Management Menu");
             System.out.println("6. Manage Medical Certificates");
-            System.out.println("7. doctor Menu");
+            System.out.println("7. Doctor Menu");
             System.out.println("8. Exit");
             System.out.print("Enter your choice: ");
 
@@ -39,21 +33,16 @@ public class App {
             scanner.nextLine(); // Consume the remaining newline
 
             switch (choice) {
-
-                case 1 -> MedicalRecordMenu.displayMenu;
-                case 2 -> System.out.println("Appointment Management (to be implemented)");
-                case 1 -> System.out.println("Medical Record Management (to be implemented)");
+                case 1 -> medicalRecordMenu.displayMenu();
                 case 2 -> appointmentMenu.displayMenu();
                 case 3 -> patientMenu.displayMenu();
-                case 4 -> ConsultationMenu.displayMenu();
-                case 5 -> PrescriptionMenu.displayMenu();
+                case 4 -> consultationMenu.displayMenu();
+                case 5 -> prescriptionMenu.displayMenu();
                 case 6 -> System.out.println("Manage Medical Certificates (to be implemented)");
-                case 7 -> DoctorMenu.displayMenu();
+                case 7 -> doctorMenu.displayMenu();
                 case 8 -> System.out.println("System shutting down. Goodbye!");
                 default -> System.out.println("Invalid choice! Please try again.");
             }
-        } while (choice != 7);
-        
-       
+        } while (choice != 8);
     }
 }

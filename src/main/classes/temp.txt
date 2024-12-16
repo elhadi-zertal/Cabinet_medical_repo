@@ -1,0 +1,12 @@
+// Method to cancel consultation
+    public void cancelConsultation(String reason) {
+        if (status == ConsultationStatus.COMPLETED) {
+            throw new IllegalStateException("Cannot cancel a completed consultation");
+        }
+        if (status == ConsultationStatus.CANCELLED) {
+            throw new IllegalStateException("Consultation is already cancelled");
+        }
+        validateInput(reason, "Cancellation reason cannot be empty");
+        status = ConsultationStatus.CANCELLED;
+        addNote("Consultation cancelled. Reason: " + reason);
+    }
