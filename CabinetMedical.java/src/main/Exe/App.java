@@ -2,6 +2,7 @@ package main.Exe;
 import java.util.Scanner;
 
 import main.classes.Consultation;
+import main.classes.DoctorMenu;
 import main.classes.MedicalRecord;
 import main.classes.MedicalRecordMenu;
 
@@ -22,7 +23,12 @@ public class App {
         PatientMenu patientMenu = new PatientMenu();
         // Create an instance of AppointmentMenu
         AppointmentMenu appointmentMenu = new AppointmentMenu();
-        
+        // Create an instance of MedicalRecordMenu
+        MedicalRecordMenu medicalRecordMenu = new MedicalRecordMenu();
+        //create an instance of DoctorMenu
+        DoctorMenu doctorMenu = new DoctorMenu();
+
+
         do {
             System.out.println("\n=== Medical Practice Management ===");
             System.out.println("1. Medical Record Management Menu");
@@ -40,19 +46,18 @@ public class App {
 
             switch (choice) {
 
-                case 1 -> MedicalRecordMenu.displayMenu;
-                case 2 -> System.out.println("Appointment Management (to be implemented)");
-                case 1 -> System.out.println("Medical Record Management (to be implemented)");
+
+                case 1 -> medicalRecordMenu.displayMenu();
                 case 2 -> appointmentMenu.displayMenu();
                 case 3 -> patientMenu.displayMenu();
                 case 4 -> ConsultationMenu.displayMenu();
                 case 5 -> PrescriptionMenu.displayMenu();
                 case 6 -> System.out.println("Manage Medical Certificates (to be implemented)");
-                case 7 -> DoctorMenu.displayMenu();
+                case 7 -> doctorMenu.displayMenu();
                 case 8 -> System.out.println("System shutting down. Goodbye!");
                 default -> System.out.println("Invalid choice! Please try again.");
             }
-        } while (choice != 7);
+        } while (choice != 8);
         
        
     }

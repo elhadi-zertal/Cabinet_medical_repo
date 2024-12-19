@@ -3,13 +3,10 @@ package main.classes;
 import java.util.Scanner;
 
 public class DoctorMenu {
-    private final DoctorManager doctorManager;
-    private final Scanner scanner;
+    DoctorManager doctorManager = new DoctorManager();
+    Scanner scanner = new Scanner(System.in);
 
-    public DoctorMenu() {
-        this.doctorManager = new DoctorManager();
-        this.scanner = new Scanner(System.in);
-    }
+
     public static Doctor findDoctorByName(String doctorName, DoctorManager doctorManager) {
         if (doctorName == null || doctorName.trim().isEmpty() || doctorManager == null) {
             return null;

@@ -11,13 +11,10 @@ import java.util.function.Consumer;
 
 
 public class MedicalRecordMenu {
-    private final Scanner scanner;
-    private final MedicalRecordManager recordManager;
 
-    public MedicalRecordMenu(Scanner scanner, MedicalRecordManager recordManager) {
-        this.scanner = scanner;
-        this.recordManager = recordManager;
-    }
+    Scanner scanner = new Scanner(System.in);
+    MedicalRecordManager recordManager = new MedicalRecordManager();
+    
     public void displayMenu() {
         while (true) {
             System.out.println("\n=== Medical Record Management ===");
