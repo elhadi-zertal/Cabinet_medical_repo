@@ -38,14 +38,17 @@ public class AppointmentMenu {
         String doctorId = scanner.nextLine();
         
         // Find the doctor 
-        Doctor doctor = findDoctorById(doctorId); 
+        Doctor doctor = DoctorManager.getDoctorById(doctorId); 
 
         // Get patient details
         System.out.print("Enter patient ID: ");
         String patientId = scanner.nextLine();
+
+        // Create an instance of PatientManager
+        PatientManager patientManager = new PatientManager();
         
         // Find the patient 
-        Patient patient = findPatientById(patientId);
+        Patient patient = patientManager.getPatientById(patientId);
         
         // Get appointment details
         System.out.print("Enter appointment day: ");
@@ -77,14 +80,14 @@ public class AppointmentMenu {
         String doctorId = scanner.nextLine();
         
         // Find the doctor
-        Doctor doctor = findDoctorById(doctorId);
+        Doctor doctor = DoctorManager.getDoctorById(doctorId);
         
         // Get the appointment ID to cancel
         System.out.print("Enter appointment ID to cancel: ");
         String appointmentId = scanner.nextLine();
         
         // Cancel the appointment using AppointmentManager
-        boolean success = AppointmentManager.cancelAppointment(doctor, appointmentId);
+        AppointmentManager.cancelAppointment(doctor, appointmentId);
         
     }
     
@@ -95,7 +98,7 @@ public class AppointmentMenu {
         String doctorId = scanner.nextLine();
         
         // Find the doctor
-        Doctor doctor = findDoctorById(doctorId);
+        Doctor doctor = DoctorManager.getDoctorById(doctorId);
         
         // List the appointments for this doctor
         AppointmentManager.listAppointments(doctor);
