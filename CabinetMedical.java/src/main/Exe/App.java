@@ -27,6 +27,7 @@ public class App {
         MedicalRecordMenu medicalRecordMenu = new MedicalRecordMenu();
         //create an instance of DoctorMenu
         DoctorMenu doctorMenu = new DoctorMenu();
+        ConsultationMenu consultationMenu = new ConsultationMenu();
 
 
         do {
@@ -50,7 +51,7 @@ public class App {
                 case 1 -> medicalRecordMenu.displayMenu();
                 case 2 -> appointmentMenu.displayMenu();
                 case 3 -> patientMenu.displayMenu();
-                case 4 -> ConsultationMenu.displayMenu();
+                case 4 -> consultationMenu.displayMenu();
                 case 5 -> PrescriptionMenu.displayMenu();
                 case 6 -> System.out.println("Manage Medical Certificates (to be implemented)");
                 case 7 -> doctorMenu.displayMenu();
