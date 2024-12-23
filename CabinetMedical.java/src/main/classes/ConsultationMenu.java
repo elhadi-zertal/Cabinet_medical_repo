@@ -8,8 +8,8 @@ public class ConsultationMenu {
     private static final String ERROR_PREFIX = "Error: ";
     private static final String SUCCESS_SUFFIX = " ✓";
     
-    private final Scanner scanner;
-    private final Consultation consultation ;
+    private Scanner scanner;
+    private Consultation consultation ;
     private consultationFee selectedFee;
 
     public ConsultationMenu(Consultation consultation) {
