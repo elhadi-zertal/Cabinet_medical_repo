@@ -2,6 +2,7 @@ package main.Exe;
 import java.util.Scanner;
 
 import main.classes.Consultation;
+import main.classes.ConsultationMenu;
 import main.classes.DoctorMenu;
 import main.classes.MedicalRecord;
 import main.classes.MedicalRecordMenu;
