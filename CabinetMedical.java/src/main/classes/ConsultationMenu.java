@@ -1,4 +1,3 @@
-
 package main.classes;
 
 import java.time.LocalDateTime;
@@ -12,7 +11,7 @@ public class ConsultationMenu {
     private Consultation consultation ;
     private consultationFee selectedFee;
 
-    public ConsultationMenu(Consultation consultation) {
+    public ConsultationMenu() {
         this.scanner = new Scanner(System.in);
         this.consultation = consultation;
     }
