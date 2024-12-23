@@ -13,7 +13,7 @@ public class App {
         AppointmentMenu appointmentMenu = new AppointmentMenu();
         MedicalRecordManager recordManager = new MedicalRecordManager();
         MedicalRecordMenu medicalRecordMenu = new MedicalRecordMenu(scanner, recordManager);
-        ConsultationMenu consultationMenu = new ConsultationMenu(new Consultation());
+        ConsultationMenu consultationMenu = new ConsultationMenu();
         PrescriptionMenu prescriptionMenu = new PrescriptionMenu();
         DoctorMenu doctorMenu = new DoctorMenu();
         
