@@ -22,8 +22,12 @@ public class Appointment {
 
     // Method to generate a unique appointment ID
     private String generateAppointmentId() {
+        if (patient == null) {
+            throw new IllegalStateException("Patient cannot be null when generating appointment ID");
+        }
         return patient.getId() + "_" + day + "-" + month + "-" + year + "_" + hour;
     }
+    
 
     // Getters and Setters for Appointment's attributes
     public int getDay() {

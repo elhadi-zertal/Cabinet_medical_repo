@@ -28,6 +28,7 @@ public class App {
         MedicalRecordMenu medicalRecordMenu = new MedicalRecordMenu();
         //create an instance of DoctorMenu
         DoctorMenu doctorMenu = new DoctorMenu();
+        //create an instance of ConsultationMenu
         ConsultationMenu consultationMenu = new ConsultationMenu();
 
 
