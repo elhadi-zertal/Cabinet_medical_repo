@@ -1,16 +1,9 @@
 package main.Exe;
 import java.util.Scanner;
-
-import main.classes.Consultation;
+import main.classes.AppointmentMenu;
 import main.classes.ConsultationMenu;
 import main.classes.DoctorMenu;
-import main.classes.MedicalRecord;
 import main.classes.MedicalRecordMenu;
-
-
-
-import main.classes.AppointmentMenu;
-
 import main.classes.PatientMenu;
 import main.classes.PrescriptionMenu;
 
@@ -45,18 +38,18 @@ public class App {
             System.out.print("Enter your choice: ");
 
             choice = scanner.nextInt();
-            scanner.nextLine(); // Consume the remaining newline
+            scanner.nextLine(); // Consume the remaining newlin3e
 
             switch (choice) {
 
 
-                case 1 -> medicalRecordMenu.displayMenu();
-                case 2 -> appointmentMenu.displayMenu();
-                case 3 -> patientMenu.displayMenu();
+                case 1 -> doctorMenu.displayMenu();
+                case 2 -> patientMenu.displayMenu();
+                case 3 -> appointmentMenu.displayMenu();
                 case 4 -> consultationMenu.displayMenu();
                 case 5 -> PrescriptionMenu.displayMenu();
                 case 6 -> System.out.println("Manage Medical Certificates (to be implemented)");
-                case 7 -> doctorMenu.displayMenu();
+                case 7 ->  medicalRecordMenu.displayMenu();
                 case 8 -> System.out.println("System shutting down. Goodbye!");
                 default -> System.out.println("Invalid choice! Please try again.");
             }
