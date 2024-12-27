@@ -36,19 +36,16 @@ public class AppointmentMenu {
         // Get doctor and patient details
         System.out.print("Enter doctor's ID: ");
         String doctorId = scanner.nextLine();
-        
         // Find the doctor 
         Doctor doctor = DoctorManager.getDoctorById(doctorId); 
+
 
         // Get patient details
         System.out.print("Enter patient ID: ");
         String patientId = scanner.nextLine();
-
-        // Create an instance of PatientManager
-        PatientManager patientManager = new PatientManager();
-        
         // Find the patient 
-        Patient patient = patientManager.getPatientById(patientId);
+        Patient patient = PatientManager.getPatientById(patientId);
+
         
         // Get appointment details
         System.out.print("Enter appointment day: ");
@@ -68,6 +65,7 @@ public class AppointmentMenu {
         
         if (success) {
             System.out.println("Appointment added successfully.");
+            System.out.println(appointment);
         } else {
             System.out.println("Failed to add appointment, the slot is not available");
         }
