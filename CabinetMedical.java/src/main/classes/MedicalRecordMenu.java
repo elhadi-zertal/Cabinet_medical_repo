@@ -22,8 +22,7 @@ public class MedicalRecordMenu {
             System.out.println("2. View Medical Record");
             System.out.println("3. Update Medical Record");
             System.out.println("4. Delete Medical Record");
-            System.out.println("5. List All Medical Records");
-            System.out.println("6. Return to Main Menu");
+            System.out.println("5. Return to Main Menu");
             System.out.print("Enter your choice: ");
 
             try {
