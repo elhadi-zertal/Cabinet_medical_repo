@@ -76,8 +76,9 @@ public class MedicalRecordMenu {
             
             
             // Get patient from the PatientManager instance
-        PatientManager patientManager = new PatientManager(); // Create instance
-        Patient patient = patientManager.getPatientById(patientId);
+           
+            // Create instance
+        Patient patient = PatientManager.getPatientById(patientId);
         if (patient == null) {
             System.out.println("Patient not found with ID: " + patientId);
             return;
