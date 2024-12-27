@@ -27,18 +27,18 @@ public class App {
 
         do {
             System.out.println("\n=== Medical Practice Management ===");
-            System.out.println("1. Medical Record Management Menu");
-            System.out.println("2. Appointment Management Menu");
-            System.out.println("3. Patient Records Management Menu");
+            System.out.println("1. doctor Menu ");
+            System.out.println("2. Patient Records Management Menu");
+            System.out.println("3. Appointment Management Menu");
             System.out.println("4. Consultation Menu");
             System.out.println("5. Prescription Management Menu ");
             System.out.println("6. Manage Medical Certificates");
-            System.out.println("7. doctor Menu");
+            System.out.println("7. Medical Record Management Menu");
             System.out.println("8. Exit");
             System.out.print("Enter your choice: ");
 
             choice = scanner.nextInt();
-            scanner.nextLine(); // Consume the remaining newlin3e
+            scanner.nextLine(); // Consume the remaining newline
 
             switch (choice) {
 
