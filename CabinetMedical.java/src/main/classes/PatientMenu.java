@@ -8,7 +8,8 @@ import java.util.Scanner;
 
 public class PatientMenu {
 
-    PatientManager patientManager = new PatientManager();
+    private static PatientManager patientManager = new PatientManager();
+
 
 
   // This method will display the menu and handle user input

@@ -8,7 +8,8 @@ import java.util.List;
 public class PatientManager {
 
     @SuppressWarnings("FieldMayBeFinal")
-    private List<Patient> patients = new ArrayList<>(); // A list to store patients and their information
+    private static List<Patient> patients = new ArrayList<>();
+    // A list to store patients and their information
 
     // Add a new patient to the list
     public void addPatient(Patient patient) {
@@ -20,7 +21,7 @@ public class PatientManager {
   
 
     // Retrieve a patient by their ID
-    public Patient getPatientById(String id) {
+    public static Patient getPatientById(String id) {
         for (Patient patient : patients) {
             if (patient.getId().equals(id)) { // Compare the IDs
                 return patient; // Return the patient if the ID matches
@@ -28,6 +29,7 @@ public class PatientManager {
         }
         return null; // Return null if no patient is found
     }
+    
 
     // Update a patient's information by their ID
     public boolean updatePatient(String id, String address, String contactInfo, String lastAppointmentDate,
