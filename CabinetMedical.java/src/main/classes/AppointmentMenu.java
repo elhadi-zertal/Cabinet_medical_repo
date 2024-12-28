@@ -30,6 +30,33 @@ public class AppointmentMenu {
         } while (choice != 4);
     }
     
+    public boolean isValid(int day, int month, int year) {
+        if (year < 2025) {
+            System.out.println("The year must be 2025 or later. Please enter a valid year.");
+            return false;
+        }
+        if (month < 1 || month > 12) {
+            System.out.println("Invalid month! Please enter a month between 1 and 12.");
+            return false;
+        }
+        int maxDay = 31;
+        if (month == 2) { // February
+            if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) { // Leap year
+                maxDay = 29;
+            } else {
+                maxDay = 28;
+            }
+        } else if (month == 4 || month == 6 || month == 9 || month == 11) { // April, June, September, November
+            maxDay = 30;
+        }
+        if (day >= 1 && day <= maxDay) {
+            return true;
+        } else {
+            System.out.println("Invalid day! Please enter a day between 1 and " + maxDay + ".");
+            return false;
+        }
+    }
+    
     // Method to add an appointment
     private void addAppointment() {
         
@@ -45,17 +72,22 @@ public class AppointmentMenu {
         String patientId = scanner.nextLine();
         // Find the patient 
         Patient patient = PatientManager.getPatientById(patientId);
-
-        
+        int day, month, year;
         // Get appointment details
-        System.out.print("Enter appointment day: ");
-        int day = scanner.nextInt();
-        System.out.print("Enter appointment month: ");
-        int month = scanner.nextInt();
-        System.out.print("Enter appointment year: ");
-        int year = scanner.nextInt();
+        do {
+            System.out.print("Enter appointment day: ");
+            day = scanner.nextInt();
+            System.out.print("Enter appointment month: ");
+            month = scanner.nextInt();
+            System.out.print("Enter appointment year: ");
+            year = scanner.nextInt();
+        } while (!isValid(day,month,year));
+
+
+
         System.out.print("Enter appointment hour: ");
         int hour = scanner.nextInt();
+
         
         // Create appointment object
         Appointment appointment = new Appointment(doctor, patient, day, month, year, hour);
