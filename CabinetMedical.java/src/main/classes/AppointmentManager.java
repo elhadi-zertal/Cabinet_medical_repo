@@ -45,6 +45,7 @@ public class AppointmentManager {
             System.out.println("Scheduled Appointments for " + doctor.getDoctorName() + ":");
             for (Appointment appointment : doctor.getAppointments()) {
                 System.out.println(appointment);
+                System.out.println();
             }
         }
     }

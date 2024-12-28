@@ -126,7 +126,7 @@ public final class Doctor {
     }
 
     public List<Appointment> getAppointments() {
-        return new ArrayList<>(appointments);
+        return appointments;
     }
 
     public boolean isAvailableForAppointment(LocalDateTime dateTime, Duration duration) {
