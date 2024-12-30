@@ -16,6 +16,7 @@ public class App {
         ConsultationMenu consultationMenu = new ConsultationMenu();
         PrescriptionMenu prescriptionMenu = new PrescriptionMenu();
         DoctorMenu doctorMenu = new DoctorMenu();
+        MedicalCertificateMenu certificateMenu = new MedicalCertificateMenu(scanner);
         
         do {
             System.out.println("\n=== Medical Practice Management ===");
@@ -38,7 +39,7 @@ public class App {
                 case 3 -> patientMenu.displayMenu();
                 case 4 -> consultationMenu.displayMenu();
                 case 5 -> prescriptionMenu.displayMenu();
-                case 6 -> System.out.println("Manage Medical Certificates (to be implemented)");
+                case 6 -> certificateMenu.displayMenu();
                 case 7 -> doctorMenu.displayMenu();
                 case 8 -> System.out.println("System shutting down. Goodbye!");
                 default -> System.out.println("Invalid choice! Please try again.");

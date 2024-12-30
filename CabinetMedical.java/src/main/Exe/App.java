@@ -2,8 +2,13 @@ package main.Exe;
 import java.util.Scanner;
 import main.classes.AppointmentMenu;
 import main.classes.ConsultationMenu;
+import main.classes.Doctor;
+import main.classes.DoctorManager;
 import main.classes.DoctorMenu;
+import main.classes.MedicalCertificateMenu;
 import main.classes.MedicalRecordMenu;
+import main.classes.Patient;
+import main.classes.PatientManager;
 import main.classes.PatientMenu;
 import main.classes.PrescriptionMenu;
 
@@ -23,6 +28,7 @@ public class App {
         DoctorMenu doctorMenu = new DoctorMenu();
         //create an instance of ConsultationMenu
         ConsultationMenu consultationMenu = new ConsultationMenu();
+       
 
 
         do {
@@ -48,13 +54,43 @@ public class App {
                 case 3 -> appointmentMenu.displayMenu();
                 case 4 -> consultationMenu.displayMenu();
                 case 5 -> PrescriptionMenu.displayMenu();
-                case 6 -> System.out.println("Manage Medical Certificates (to be implemented)");
+                case 6 -> {
+                    // Search for a doctor
+                    System.out.print("Enter Doctor ID or Name to search: ");
+                    String doctorSearchTerm = scanner.nextLine().trim();
+
+                    // Attempt to find the doctor by ID first
+                    Doctor selectedDoctor = DoctorManager.findDoctorById(doctorSearchTerm); // Call static method directly
+                    if (selectedDoctor == null) {
+                        // If not found by ID, try to find by name
+                        selectedDoctor = DoctorManager.findDoctorByName(doctorSearchTerm); // Call static method directly
+                    }
+
+                    if (selectedDoctor == null) {
+                        System.out.println("No doctor found with the given ID or name. Returning to main menu.");
+                        break;
+                    }
+
+                    // Search for a patient
+                    System.out.print("Enter Patient ID to search: ");
+                    String patientId = scanner.nextLine().trim();
+                    Patient selectedPatient = PatientManager.getPatientById(patientId); // Use the existing method
+
+                    if (selectedPatient == null) {
+                        System.out.println("No patient found with the given ID. Returning to main menu.");
+                        break;
+                    }
+
+                    // Create an instance of MedicalCertificateMenu with selected doctor and patient
+                    MedicalCertificateMenu certificateMenu = new MedicalCertificateMenu(selectedDoctor, selectedPatient);
+                    certificateMenu.displayMenu(); // Call the displayMenu method
+                }
                 case 7 ->  medicalRecordMenu.displayMenu();
                 case 8 -> System.out.println("System shutting down. Goodbye!");
                 default -> System.out.println("Invalid choice! Please try again.");
             }
         } while (choice != 8);
         
-       
+        scanner.close(); // Close the scanner to prevent resource leaks
     }
 }

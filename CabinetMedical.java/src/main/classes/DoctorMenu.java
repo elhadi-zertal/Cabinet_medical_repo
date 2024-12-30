@@ -7,23 +7,7 @@ public class DoctorMenu {
     Scanner scanner = new Scanner(System.in);
 
 
-    public static Doctor findDoctorByName(String doctorName, DoctorManager doctorManager) {
-        if (doctorName == null || doctorName.trim().isEmpty() || doctorManager == null) {
-            return null;
-        }
-        return doctorManager.getDoctorByName(doctorName);
-    }
-     public static Doctor findDoctorById(String doctorId, DoctorManager doctorManager) {
-         if (doctorId == null || doctorId.trim().isEmpty() || doctorManager == null) {
-             return null;
-         }
-         return doctorManager.getDoctorById(doctorId);
-     }
-     
-    // Instance method for internal use
-    private Doctor findDoctorByName(String doctorName) {
-        return doctorManager.getDoctorByName(doctorName);
-    }
+    
     public void displayMenu() {
         int choice;
         do {

@@ -22,10 +22,25 @@ public class DoctorManager {
                 .orElse(null);
     }
 
-    public static List<Doctor> getAllDoctors() {
-        return new ArrayList<>(doctors.values());
-    }
+    
+     public static List<Doctor> getAllDoctors() {
+    return new ArrayList<>(doctors.values());
+}
 
+public static Doctor findDoctorByName(String doctorName) {
+    if (doctorName == null || doctorName.trim().isEmpty()) {
+        return null;
+    }
+    return getDoctorByName(doctorName); // Call the existing method to find by name
+}
+
+public static Doctor findDoctorById(String doctorId) {
+    if (doctorId == null || doctorId.trim().isEmpty()) {
+        return null;
+    }
+    return getDoctorById(doctorId); // Call the existing method to find by ID
+}
+   
     public static boolean doctorExists(String doctorId, String doctorName) {
         if (doctorId != null && doctors.containsKey(doctorId)) {
             return true;
