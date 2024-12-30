@@ -1,5 +1,6 @@
 package main.classes;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MedicalCertificate {
@@ -21,7 +22,7 @@ public class MedicalCertificate {
         this.issueDate = issueDate;
         this.validUntil = validUntil;
     }
-
+ private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
     // Method to generate a formatted certificate text
     public String generateCertificateText() {
         StringBuilder sb = new StringBuilder();
@@ -29,15 +30,17 @@ public class MedicalCertificate {
         sb.append("I, Dr. ").append(doctor.getDoctorName())
           .append(", hereby certify that I have examined the following individual today:\n\n");
         sb.append("Mr./Mrs. ").append(patient.getName())
-          .append("\nDate of Birth: [Date of Birth]\n");
-        sb.append("\nPurpose: ").append(purpose);
-        sb.append("\n\nObservations: ").append(description);
-        sb.append("\n\nCertificate issued on: ").append(issueDate);
+          .append("\n\nPurpose: ").append(purpose) // Ensure this is only added once
+          .append("\n\nObservations: ").append(description)
+          .append("\n\nCertificate issued on: ").append(DATE_FORMAT.format(issueDate)); // Format the issue date
+    
         if (validUntil != null) {
-            sb.append("\nValid until: ").append(validUntil);
+            sb.append("\nValid until: ").append(DATE_FORMAT.format(validUntil)); // Format the valid until date
         }
+    
         sb.append("\n\nDoctor's Signature:\nDr. ").append(doctor.getDoctorName())
-          .append("\n").append(doctor.getSpecialization());
+          .append("\n").append(doctor.getSpecialization()); // Assuming you have a specialization field
+    
         return sb.toString();
     }
 

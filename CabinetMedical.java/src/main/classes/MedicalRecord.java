@@ -20,11 +20,13 @@ public class MedicalRecord {
     private final LocalDateTime recordDate;
     private VitalSigns vitalSigns;
 
+    // Updated constructor to include vital signs parameters
     public MedicalRecord(String recordId, Patient patient, Doctor doctor,
-                        List<String> diagnoses, List<String> treatments,
-                        List<String> allergies, List<String> medicalHistory,
-                        List<String> surgicalHistory, List<Prescription> prescriptions,
-                        String additionalNotes) {
+                         List<String> diagnoses, List<String> treatments,
+                         List<String> allergies, List<String> medicalHistory,
+                         List<String> surgicalHistory, List<Prescription> prescriptions,
+                         String additionalNotes, double weight, double height, 
+                         String bloodPressure, double temperature, String additionalMetrics) {
         this.recordId = Objects.requireNonNull(recordId, "Record ID cannot be null");
         this.patient = Objects.requireNonNull(patient, "Patient cannot be null");
         this.doctor = Objects.requireNonNull(doctor, "Doctor cannot be null");
@@ -36,7 +38,7 @@ public class MedicalRecord {
         this.prescriptions = new ArrayList<>(prescriptions != null ? prescriptions : new ArrayList<>());
         this.additionalNotes = additionalNotes != null ? additionalNotes : "";
         this.recordDate = LocalDateTime.now();
-        this.vitalSigns = new VitalSigns();
+        this.vitalSigns = new VitalSigns(weight, height, bloodPressure, temperature, additionalMetrics);
     }
 
     // Getters
@@ -126,7 +128,7 @@ public class MedicalRecord {
     }
 
     public void updateVitalSigns(double weight, double height, String bloodPressure, 
-                                double temperature, String additionalMetrics) {
+                                  double temperature, String additionalMetrics) {
         this.vitalSigns = new VitalSigns(weight, height, bloodPressure, temperature, additionalMetrics);
     }
 
@@ -155,31 +157,80 @@ public class MedicalRecord {
     }
 
     // Inner class for Vital Signs
-    private static class VitalSigns {
-        private double weight;
-        private double height;
-        private String bloodPressure;
-        private double temperature;
-        private String additionalMetrics;
+    public class VitalSigns {
+        private double weight; // Weight in kilograms
+        private double height; // Height in meters
+        private String bloodPressure; // Blood pressure as a String (e.g., "120/80")
+        private double temperature; // Temperature in Celsius
+        private String additionalMetrics; // Additional metrics as a String
 
-        public VitalSigns() {
-            // Default constructor with empty values
-        }
-
-        public VitalSigns(double weight, double height, String bloodPressure, 
-                         double temperature, String additionalMetrics) {
+        // Constructor with parameters
+        public VitalSigns(double weight, double height, String bloodPressure, double temperature, String additionalMetrics) {
             this.weight = weight;
             this.height = height;
             this.bloodPressure = bloodPressure;
+            this.temperature = temperature; // Now accepting temperature as double
+            this.additionalMetrics = additionalMetrics != null ? additionalMetrics : ""; // Initialize to empty string if null
+        }
+
+        // Getters and Setters
+        public double getWeight() {
+            return weight;
+        }
+
+        public void setWeight(double weight) {
+            this.weight = weight;
+        }
+
+        public double getHeight() {
+            return height;
+        }
+
+        public void setHeight(double height) {
+            this.height = height;
+        }
+
+        public String getBloodPressure() {
+            return bloodPressure;
+        }
+
+        public void setBloodPressure(String bloodPressure) {
+            this.bloodPressure = bloodPressure;
+        }
+
+        public double getTemperature() {
+            return temperature;
+        }
+
+        public void setTemperature(double temperature) {
             this.temperature = temperature;
-            this.additionalMetrics = additionalMetrics;
+        }
+
+        public String getAdditionalMetrics() {
+            return additionalMetrics;
+        }
+
+        public void setAdditionalMetrics(String additionalMetrics) {
+            this.additionalMetrics = additionalMetrics != null ? additionalMetrics : ""; // Ensure it's not null
         }
 
         @Override
         public String toString() {
-            return String.format("Weight: %.1f kg, Height: %.1f cm, BP: %s, Temp: %.1f°C%s",
-                weight, height, bloodPressure, temperature,
-                additionalMetrics.isEmpty() ? "" : ", Additional: " + additionalMetrics);
+            StringBuilder sb = new StringBuilder();
+            sb.append("Weight: ").append(weight).append(" kg\n");
+            sb.append("Height: ").append(height).append(" m\n");
+            sb.append("Blood Pressure: ").append(bloodPressure).append("\n");
+            sb.append("Temperature: ").append(temperature).append(" °C\n");
+
+            // Check if additionalMetrics is not null and not empty
+            if (this.additionalMetrics != null && !this.additionalMetrics.isEmpty()) {
+                sb.append("Additional Metrics: ").append(this.additionalMetrics).append("\n");
+            } else {
+                sb.append("Additional Metrics: Not available\n");
+            }
+
+            return sb.toString();
         }
     }
 }
+

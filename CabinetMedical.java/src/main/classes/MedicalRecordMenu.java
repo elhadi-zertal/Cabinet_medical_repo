@@ -8,8 +8,6 @@ import java.util.Scanner;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-
-
 public class MedicalRecordMenu {
 
     Scanner scanner = new Scanner(System.in);
@@ -43,25 +41,22 @@ public class MedicalRecordMenu {
             }
         }
     }
-    public String getName() {
-        return "Medical Record Menu";
-    }
-   private String generateUniqueRecordId() {
-    LocalDate currentDate = LocalDate.now();
-    String datePrefix = String.format("%d%02d%02d", 
-        currentDate.getYear(),
-        currentDate.getMonthValue(),
-        currentDate.getDayOfMonth());
-    
-    // Generate a shorter unique string using UUID
-    String uniquePart = UUID.randomUUID().toString()
-        .substring(0, 8)
-        .toUpperCase();
-    
-    return datePrefix + "-" + uniquePart;
-}
 
-    
+    private String generateUniqueRecordId() {
+        LocalDate currentDate = LocalDate.now();
+        String datePrefix = String.format("%d%02d%02d", 
+            currentDate.getYear(),
+            currentDate.getMonthValue(),
+            currentDate.getDayOfMonth());
+        
+        // Generate a shorter unique string using UUID
+        String uniquePart = UUID.randomUUID().toString()
+            .substring(0, 8)
+            .toUpperCase();
+        
+        return datePrefix + "-" + uniquePart;
+    }
+
     private void addMedicalRecord() {
         try {
             System.out.println("\n=== Add New Medical Record ===");
@@ -74,15 +69,13 @@ public class MedicalRecordMenu {
                 return;
             }
             
-            
             // Get patient from the PatientManager instance
-           
-            // Create instance
-        Patient patient = PatientManager.getPatientById(patientId);
-        if (patient == null) {
-            System.out.println("Patient not found with ID: " + patientId);
-            return;
-        }
+            Patient patient = PatientManager.getPatientById(patientId);
+            if (patient == null) {
+                System.out.println("Patient not found with ID: " + patientId);
+                return;
+            }
+
             // Get and validate Doctor
             System.out.print("Enter Doctor ID: ");
             String doctorId = scanner.nextLine().trim();
@@ -96,7 +89,23 @@ public class MedicalRecordMenu {
                 System.out.println("Doctor not found with ID: " + doctorId);
                 return;
             }
-    
+
+            // Gather vital signs information
+            System.out.print("Enter weight (kg): ");
+            double weight = Double.parseDouble(scanner.nextLine().trim());
+
+            System.out.print("Enter height (m): ");
+            double height = Double.parseDouble(scanner.nextLine().trim());
+
+            System.out.print("Enter blood pressure (e.g., 120/80): ");
+            String bloodPressure = scanner.nextLine().trim();
+
+            System.out.print("Enter temperature (°C): ");
+            double temperature = Double.parseDouble(scanner.nextLine().trim());
+
+            System.out.print("Enter additional metrics (if any): ");
+            String additionalMetrics = scanner.nextLine().trim();
+
             // Create new medical record
             String recordId = generateUniqueRecordId();
             
@@ -107,10 +116,15 @@ public class MedicalRecordMenu {
                 new ArrayList<>(),       // List<String> diagnoses
                 new ArrayList<>(),       // List<String> treatments
                 new ArrayList<>(),       // List<String> allergies
-                new ArrayList<>(),       // List<String> medicalHistory
+                new ArrayList<>(),       // List<String> medical ```java
                 new ArrayList<>(),       // List<String> surgicalHistory
                 new ArrayList<>(),       // List<Prescription> prescriptions
-                ""                       // String additionalNotes
+                "",                       // String additionalNotes
+                weight,                  // double weight
+                height,                  // double height
+                bloodPressure,           // String bloodPressure
+                temperature,             // double temperature
+                additionalMetrics        // String additionalMetrics
             );
             
             // Add diagnosis and treatment
@@ -137,9 +151,7 @@ public class MedicalRecordMenu {
             System.out.println("An unexpected error occurred: " + e.getMessage());
         }
     }
-    
 
-    
     private void updateMedicalRecord() {
         System.out.println("\n=== Update Medical Record ===");
         System.out.print("Enter Record ID: ");
@@ -188,7 +200,7 @@ public class MedicalRecordMenu {
             case 3 -> updateField("Enter new allergy: ", record::addAllergy);
             case 4 -> updateField("Enter medical history item: ", record::addMedicalHistory);
             case 5 -> updateField("Enter surgical history item: ", record::addSurgicalHistory);
-            case 6 -> updateNotes(record);
+            case 6 -> updateVitalSigns(record);
             default -> System.out.println("Invalid choice!");
         }
     }
@@ -201,13 +213,27 @@ public class MedicalRecordMenu {
         }
     }
 
-    private void updateNotes(MedicalRecord record) {
-        System.out.print("Enter additional notes: ");
-        String notes = scanner.nextLine().trim();
-        if (!notes.isEmpty()) {
-            String currentNotes = record.getAdditionalNotes();
-            record.setAdditionalNotes(currentNotes == null || currentNotes.isEmpty() ? 
-                notes : currentNotes + "\n" + notes);
+    private void updateVitalSigns(MedicalRecord record) {
+        try {
+            System.out.print("Enter new weight (kg): ");
+            double weight = Double.parseDouble(scanner.nextLine().trim());
+
+            System.out.print("Enter new height (m): ");
+            double height = Double.parseDouble(scanner.nextLine().trim());
+
+            System.out.print("Enter new blood pressure (e.g., 120/80): ");
+            String bloodPressure = scanner.nextLine().trim();
+
+            System.out.print("Enter new temperature (°C): ");
+            double temperature = Double.parseDouble(scanner.nextLine().trim());
+
+            System.out.print("Enter additional metrics (if any): ");
+            String additionalMetrics = scanner.nextLine().trim();
+
+            record.updateVitalSigns(weight, height, bloodPressure, temperature, additionalMetrics);
+            System.out.println("Vital signs updated successfully!");
+        } catch (NumberFormatException e) {
+            System.out.println("Please enter valid numbers for weight, height, and temperature.");
         }
     }
 
@@ -289,7 +315,8 @@ public class MedicalRecordMenu {
     private boolean confirmDeletion() {
         System.out.print("Are you sure you want to delete this record? (y/n): ");
         return scanner.nextLine().trim().equalsIgnoreCase("y");
-    }}
+    }
+}
 
     
 
