@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import main.classes.MedicalRecord.VitalSigns;
 
 public class MedicalRecord {
     private final String recordId;
@@ -85,7 +86,9 @@ public class MedicalRecord {
     public String getRecordDate() {
         return recordDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
-
+    public VitalSigns getVitalSigns() {
+        return vitalSigns;
+    }
     // Add methods
     public void addDiagnosis(String diagnosis) {
         if (diagnosis != null && !diagnosis.trim().isEmpty()) {

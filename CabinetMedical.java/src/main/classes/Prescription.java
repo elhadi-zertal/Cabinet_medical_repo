@@ -15,7 +15,7 @@ public class Prescription {
     private LocalDateTime validityDate;
     private final List<String> medicalExams;
     private String additionalNotes;
-
+    private static List<Prescription> prescriptions = new ArrayList<>(); // Static list to hold all prescriptions
     // Constructor with builder pattern
     private Prescription(Builder builder) {
         this.prescriptionId = Objects.requireNonNull(builder.prescriptionId, "Prescription ID cannot be null");
@@ -115,6 +115,11 @@ public class Prescription {
     public String getAdditionalNotes() {
         return additionalNotes;
     }
+    
+
+    public static List<Prescription> getPrescriptions() {
+        return prescriptions;
+    }
 
     // Setters with validation
     public void setDoctor(Doctor doctor) {
@@ -136,7 +141,12 @@ public class Prescription {
     public void setAdditionalNotes(String additionalNotes) {
         this.additionalNotes = additionalNotes;
     }
+    public void setDetails(String additionalNotes) {
+        this.additionalNotes = additionalNotes;
+    }
+    
 
+   
     // Medication Management Methods
     public boolean addMedication(Medication medication) {
         return Objects.requireNonNull(medication, "Medication cannot be null") != null 
@@ -166,8 +176,27 @@ public class Prescription {
                 .findFirst();
     }
 
-
-
+// Methods to get prescriptions by patient ID name or ID 
+public static List<Prescription> getPrescriptionsByPatientId(String patientId) {
+    List<Prescription> patientPrescriptions = new ArrayList<>();
+    for (Prescription prescription : prescriptions) {
+        if (prescription.getPatient().getId().equals(patientId)) {
+            patientPrescriptions.add(prescription);
+        }
+    }
+    return patientPrescriptions; // Return the list of prescriptions for the specified patient ID
+}
+public static List<Prescription> getPrescriptionsByPatientName(String patientName) {
+    return prescriptions.stream()
+            .filter(p -> p.getPatient().getName().equalsIgnoreCase(patientName))
+            .collect(Collectors.toList());
+}
+public static Prescription getPrescriptionById(String prescriptionId) {
+    return prescriptions.stream()
+            .filter(p -> p.getPrescriptionId().equals(prescriptionId))
+            .findFirst()
+            .orElse(null);
+}
     // Validation Methods
    
 

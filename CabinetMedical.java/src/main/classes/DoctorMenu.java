@@ -16,7 +16,8 @@ public class DoctorMenu {
             System.out.println("2. Update Doctor Information");
             System.out.println("3. View Doctor Records");
             System.out.println("4. Delete a Doctor");
-            System.out.println("5. Back to Main Menu");
+            System.out.println("5. View All Doctors");
+            System.out.println("6. Back to Main Menu");
             System.out.print("Enter your choice: ");
             
             try {
@@ -35,7 +36,8 @@ public class DoctorMenu {
             case 2 -> updateDoctor();
             case 3 -> viewDoctor();
             case 4 -> deleteDoctor();
-            case 5 -> System.out.println("Returning to the main menu...");
+            case 5 -> DoctorManager.listAllDoctors();
+            case 6 -> System.out.println("Returning to the main menu...");
             default -> System.out.println("Invalid choice! Please try again.");
         }
     }
@@ -43,16 +45,9 @@ public class DoctorMenu {
     private void addDoctor() {
         System.out.println("\n=== Add a New Doctor ===");
         
-        // Validate Doctor ID
-        String id;
-        do {
-            System.out.print("Enter Doctor ID: ");
-            id = scanner.nextLine().trim();
-            if (id.isEmpty()) {
-                System.out.println("Doctor ID cannot be empty.");
-            }
-        } while (id.isEmpty());
-        
+       
+        // Generate a unique Doctor ID
+        String doctorId = Doctor.generateDoctorId();
         // Validate Doctor Name
         String name;
         do {
@@ -86,7 +81,7 @@ public class DoctorMenu {
         try {
             // Using the Builder pattern to create a new Doctor
             Doctor doctor = new Doctor.Builder()
-                .doctorId(id)
+                .doctorId(doctorId) // Set the generated Doctor ID
                 .doctorName(name)
                 .specialization(specialization)
                 .contactInfo(contactInfo)
@@ -94,7 +89,7 @@ public class DoctorMenu {
                 .build();
                 
             doctorManager.addDoctor(doctor);
-            System.out.println("Doctor added successfully!");
+            System.out.println("Doctor added successfully! Doctor ID: " + doctorId);
         } catch (IllegalArgumentException e) {
             System.out.println("Error adding doctor: " + e.getMessage());
         }
@@ -205,7 +200,7 @@ public class DoctorMenu {
             System.out.println("Please enter a valid number.");
         }
     }
-
+  
     private void deleteDoctor() {
         System.out.println("\n=== Delete a Doctor ===");
         System.out.println("1. Search by ID");
@@ -258,6 +253,6 @@ public class DoctorMenu {
             System.out.println("Please enter a valid number.");
         }
     }}
-
+    
 
 

@@ -40,7 +40,8 @@ public static Doctor findDoctorById(String doctorId) {
     }
     return getDoctorById(doctorId); // Call the existing method to find by ID
 }
-   
+    
+
     public static boolean doctorExists(String doctorId, String doctorName) {
         if (doctorId != null && doctors.containsKey(doctorId)) {
             return true;
@@ -51,7 +52,7 @@ public static Doctor findDoctorById(String doctorId) {
         }
         return false;
     }
-
+    
     public static void addDoctor(Doctor doctor) {
         if (doctor == null || doctor.getDoctorId() == null) {
             throw new IllegalArgumentException("Invalid doctor data");
@@ -61,7 +62,7 @@ public static Doctor findDoctorById(String doctorId) {
         }
         doctors.put(doctor.getDoctorId(), doctor);
     }
-
+    
     public static boolean updateDoctor(Doctor doctor) {
         if (doctor != null && doctor.getDoctorId() != null && doctors.containsKey(doctor.getDoctorId())) {
             doctors.put(doctor.getDoctorId(), doctor);

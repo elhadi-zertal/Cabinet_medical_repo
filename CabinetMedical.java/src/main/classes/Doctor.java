@@ -11,6 +11,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public final class Doctor {
+    private static int doctorCounter = 0; // Static counter to ensure unique IDs
     private final String doctorId;
     private final String doctorName;
     private final String specialization;
@@ -103,6 +104,11 @@ public final class Doctor {
         this.currentPatientCount = new AtomicInteger(0);
         this.appointments = new ArrayList<>();
     }
+   // Method to generate a unique Doctor ID
+   public static String generateDoctorId() {
+    doctorCounter++; // Increment the counter
+    return "DOC" + String.format("%04d", doctorCounter); // Format as DOC0001, DOC0002, etc.
+}
 
     // Getters
     public String getDoctorId() {
