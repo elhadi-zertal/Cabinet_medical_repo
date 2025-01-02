@@ -75,5 +75,18 @@ public class PatientManager {
         }
     }
 
+        // Print all patients
+    public static void listAllPatients() {
+        if (patients.isEmpty()) {
+          System.out.println("No patients available.");
+          return;
+        }
+     System.out.println("List of patients:");
+        for (Patient patient : patients) {
+          System.out.println(patient); // Assumes Patient has a toString() method
+        }
+    }
+
+
     
 }

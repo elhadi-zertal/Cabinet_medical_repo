@@ -59,20 +59,43 @@ public class AppointmentMenu {
     
     // Method to add an appointment
     private void addAppointment() {
-        
-        // Get doctor and patient details
-        System.out.print("Enter doctor's ID: ");
-        String doctorId = scanner.nextLine();
-        // Find the doctor 
-        Doctor doctor = DoctorManager.getDoctorById(doctorId); 
+        //print all the doctors
+        DoctorManager.listAllDoctors();
+
+        String doctorId;
+        Doctor doctor;
+
+        do {
+            System.out.print("Enter doctor's ID: ");
+            doctorId = scanner.nextLine();
+            // Find the doctor 
+            doctor = DoctorManager.getDoctorById(doctorId);
+            if (DoctorManager.findDoctorById(doctorId) == null) {
+                System.out.println("There is no doctor with ID :" + doctorId);
+            }
+        } while (DoctorManager.findDoctorById(doctorId) == null);
 
 
-        // Get patient details
-        System.out.print("Enter patient ID: ");
-        String patientId = scanner.nextLine();
-        // Find the patient 
-        Patient patient = PatientManager.getPatientById(patientId);
+        //print all the patients
+        PatientManager.listAllPatients();
+
+        String patientId;
+        Patient patient;
+
+        do {
+            // Get patient details
+            System.out.print("Enter patient ID: ");
+            patientId = scanner.nextLine();
+            // Find the patient 
+            patient = PatientManager.getPatientById(patientId);
+            if (PatientManager.getPatientById(patientId) == null) {
+                System.out.println("There is no patient with ID :" + patientId);
+            }
+        } while (PatientManager.getPatientById(patientId) == null);
+
+
         int day, month, year;
+
         // Get appointment details
         do {
             System.out.print("Enter appointment day: ");
