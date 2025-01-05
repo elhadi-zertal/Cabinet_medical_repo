@@ -1,4 +1,4 @@
-    package main.classes;
+ package main.classes;
 
     import java.time.DayOfWeek;
     import java.time.LocalDateTime;
@@ -82,7 +82,7 @@
 
         // Utility method to get fee with full description including duration
         public String getFullDescription() {
-            return String.format("%s (Duration: %d mins) - Base Fee: %,.2f DZD", 
+            return String.format("%s (Duration: %d mins) - Base Fee: %.2f DZD", 
                 description, durationMinutes, baseFee);
         }
 
@@ -136,7 +136,7 @@
 
         // Format fee for display
         public String getFormattedFee() {
-            return String.format("%,.2f DZD", baseFee);
+            return String.format("%.2f DZD", baseFee);
         }
 
         // Check if consultation type is suitable for telemedicine
@@ -148,8 +148,7 @@
 
         @Override
         public String toString() {
-            return String.format("%s - %s (Duration: %d mins, Base Fee: %,.2f DZD)", 
+            return String.format("%s - %s (Duration: %d mins, Base Fee: %.2f DZD)", 
                 name(), description, durationMinutes, baseFee);
         }
     }
-
