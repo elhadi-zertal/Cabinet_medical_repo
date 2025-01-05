@@ -1,6 +1,7 @@
 package main.Exe;
 import java.util.Scanner;
 import main.classes.AppointmentMenu;
+import main.classes.Consultation;
 import main.classes.ConsultationMenu;
 import main.classes.Doctor;
 import main.classes.DoctorManager;
