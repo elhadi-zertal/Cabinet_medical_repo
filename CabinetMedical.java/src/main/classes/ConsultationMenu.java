@@ -1,282 +1,172 @@
 package main.classes;
 
-import java.time.LocalDateTime;
 import java.util.Scanner;
 
 public class ConsultationMenu {
-    private static final String ERROR_PREFIX = "Error: ";
-    private static final String SUCCESS_SUFFIX = " ✓";
-    
-    private Scanner scanner;
-    private Consultation consultation ;
-    private consultationFee selectedFee;
-
-    public ConsultationMenu() {
-        this.scanner = new Scanner(System.in);
-        this.consultation = consultation;
-    }
+    private Consultation consultation;
 
     public void displayMenu() {
-        while (true) {
-            System.out.println("\n=== Consultation Menu ===");
+        Scanner scanner = new Scanner(System.in);
+        boolean exit = false;
+
+        while (!exit) {
+            System.out.println("\nConsultation Menu:");
             System.out.println("1. Select Consultation Type");
             System.out.println("2. Start Consultation");
-            System.out.println("3. Medical Records");
-            System.out.println("4. View Fees");
-            System.out.println("5. View Summary");
-            System.out.println("6. Complete Consultation");
-            System.out.println("0. Exit");
+            System.out.println("3. Add Treatment");
+            System.out.println("4. Add Note");
+            System.out.println("5. View Fee");
+            System.out.println("6. View Summary");
+            System.out.println("7. Complete Consultation");
+            System.out.println("8. Back to the main menu");
 
-            try {
-                int choice = getIntInput("Enter your choice: ");
-                if (processChoice(choice)) {
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            switch (choice) {
+                case 1:
+                    selectConsultationType(scanner);
                     break;
-                }
-            } catch (Exception e) {
-                System.out.println(ERROR_PREFIX + e.getMessage());
+                case 2:
+                    startConsultation();
+                    break;
+                case 3:
+                    addTreatment(scanner);
+                    break;
+                case 4:
+                    addNote(scanner);
+                    break;
+                case 5:
+                    viewFee();
+                    break;
+                case 6:
+                    viewSummary();
+                    break;
+                case 7:
+                    completeConsultation();
+                    break;
+                case 8:
+                    exit = true;
+                    System.out.println("Returning to the main menu...");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
             }
-        }
+         
     }
-
-    private boolean processChoice(int choice) {
-        try {
-            return switch (choice) {
-                case 1 -> handleConsultationType();
-                case 2 -> handleStartConsultation();
-                case 3 -> handleMedicalRecords();
-                case 4 -> handleViewFees();
-                case 5 -> handleViewSummary();
-                case 6 -> handleCompleteConsultation();
-                case 0 -> true;
-                default -> {
-                    System.out.println("Invalid option. Please try again.");
-                    yield false;
-                }
-            };
-        } catch (Exception e) {
-            System.out.println(ERROR_PREFIX + e.getMessage());
-            return false;
-        }
     }
-
-    private boolean handleConsultationType() {
-        System.out.println("\n=== Available Consultation Types ===");
+    private void selectConsultationType(Scanner scanner) {
+        System.out.println("\nAvailable Consultation Types:");
         for (consultationFee fee : consultationFee.values()) {
-            System.out.println(fee.toString());
-            if (fee.isSuitableForTelemedicine()) {
-                System.out.println("* Available for Telemedicine");
-            }
-            System.out.println("Estimated Wait Time: " + fee.getEstimatedWaitTime());
-            System.out.println("--------------------------------");
+            System.out.println(fee.ordinal() + 1 + ". " + fee.getFullDescription());
         }
 
-        try {
-            String type = getStringInput("Enter consultation type: ");
-            selectedFee = consultationFee.getByType(type);
-            System.out.println("Selected: " + selectedFee.getFullDescription());
-            return false;
-        } catch (IllegalArgumentException e) {
-            System.out.println(ERROR_PREFIX + e.getMessage());
-            return false;
+        System.out.print("Select a consultation type by number: ");
+        int typeChoice = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        if (typeChoice > 0 && typeChoice <= consultationFee.values().length) {
+            consultationFee selectedFee = consultationFee.values()[typeChoice - 1];
+            System.out.print("Enter doctor's name: ");
+            String doctorName = scanner.nextLine().trim();
+    
+            System.out.print("Enter patient's name: ");
+            String patientName = scanner.nextLine().trim();
+    
+
+            consultation = new Consultation(selectedFee , doctorName , patientName);
+            System.out.println("Selected Consultation Type: " + selectedFee.getDescription());
+            System.out.println("Doctor: " + doctorName);
+            System.out.println("Patient: " + patientName);
+    
+        } else {
+            System.out.println("Invalid choice. Please select a valid consultation type.");
         }
     }
+  
 
-    private boolean handleStartConsultation() {
-        if (selectedFee == null) {
-            System.out.println(ERROR_PREFIX + "Please select a consultation type first");
-            return false;
+    private void startConsultation() {
+        if (consultation == null) {
+            System.out.println("No consultation type selected. Please select a type first.");
+            return;
         }
 
         try {
             consultation.startConsultation();
-            System.out.println("Consultation started" + SUCCESS_SUFFIX);
-            return false;
-        } catch (Exception e) {
-            System.out.println(ERROR_PREFIX + e.getMessage());
-            return false;
+            System.out.println("Consultation started.");
+        } catch (IllegalStateException e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
-    private boolean handleMedicalRecords() {
-        if (!consultation.isStarted()) {
-            System.out.println(ERROR_PREFIX + "Consultation must be started first");
-            return false;
-        }
-        addMedicalRecordMenu();
-        return false;
-    }
-
-    private boolean handleViewFees() {
-        if (selectedFee == null) {
-            System.out.println(ERROR_PREFIX + "Please select a consultation type first");
-            return false;
+    private void addTreatment(Scanner scanner) {
+        if (consultation == null) {
+            System.out.println("No consultation in progress. Please start a consultation first.");
+            return;
         }
 
+        System.out.print("Enter treatment details: ");
+        String treatment = scanner.nextLine();
 
-System.out.println("\n=== Fee Details ===");
-        System.out.println("Base Fee: " + selectedFee.getFormattedFee());
-        System.out.println("Hourly Rate: " + String.format("%,.2f DZD", selectedFee.getHourlyRate()));
-        
-        LocalDateTime consultationTime = consultation.getConsultationDateTime();
-        boolean isWeekend = confirmAction("Calculate weekend fee");
-        boolean isHoliday = confirmAction("Calculate holiday fee");
-        
-        double calculatedFee = selectedFee.calculateFee(consultationTime, isHoliday);
-        System.out.printf("Calculated Fee: %,.2f DZD%n", calculatedFee);
-        
-        if (selectedFee.isAfterHours(consultationTime)) {
-            System.out.println("* After-hours surcharge applied");
-        }
-        if (selectedFee.isEmergency()) {
-            System.out.println("* Emergency consultation fee applied");
-        }
-        
-        return false;
-    }
-
-    private boolean handleViewSummary() {
         try {
-            System.out.println("\n=== Consultation Summary ===");
-            System.out.println(consultation.getConsultationSummary());
-            return false;
-        } catch (Exception e) {
-            System.out.println(ERROR_PREFIX + e.getMessage());
-            return false;
+            consultation.addTreatment(treatment);
+            System.out.println("Treatment added successfully.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
-    private boolean handleCompleteConsultation() {
-        if (!confirmAction("complete this consultation")) {
-            return false;
+    private void addNote(Scanner scanner) {
+        if (consultation == null) {
+            System.out.println("No consultation in progress. Please start a consultation first.");
+            return;
         }
+
+        System.out.print("Enter note details: ");
+        String note = scanner.nextLine();
+
+        try {
+            consultation.addNote(note);
+            System.out.println("Note added successfully.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void viewFee() {
+        if (consultation == null) {
+            System.out.println("No consultation type selected. Please select a type first.");
+            return;
+        }
+
+        consultationFee fee = consultation.getFee();
+        System.out.println("\nConsultation Fee Details:");
+        System.out.println(fee.getFullDescription());
+    }
+
+    private void viewSummary() {
+        if (consultation == null) {
+            System.out.println("No consultation in progress. Please start a consultation first.");
+            return;
+        }
+
+        System.out.println("\nConsultation Summary:");
+        System.out.println(consultation.getConsultationSummary());
+    }
+
+    private void completeConsultation() {
+        if (consultation == null) {
+            System.out.println("No consultation in progress. Please start a consultation first.");
+            return;
+        }
+
         try {
             consultation.completeConsultation();
-            System.out.println("Consultation completed" + SUCCESS_SUFFIX);
-            handleViewSummary();
-            return true;
-        } catch (Exception e) {
-            System.out.println(ERROR_PREFIX + e.getMessage());
-            return false;
+            System.out.println("Consultation completed.");
+        } catch (IllegalStateException e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
-    private void addMedicalRecordMenu() {
-        while (true) {
-            System.out.println("\n=== Medical Records Menu ===");
-            System.out.println("1. Add Diagnosis");
-            System.out.println("2. Add Treatment");
-            System.out.println("3. Update Medical History");
-            System.out.println("4. Log Allergy");
-            System.out.println("5. Add Note");
-            System.out.println("0. Back to Main Menu");
-
-            try {
-                int choice = getIntInput("Enter your choice: ");
-                if (!processMedicalRecordChoice(choice)) {
-                    return;
-                }
-            } catch (Exception e) {
-                System.out.println(ERROR_PREFIX + e.getMessage());
-            }
-        }
-    }
-
-    private boolean processMedicalRecordChoice(int choice) {
-        try {
-            return switch (choice) {
-                case 1 -> { addDiagnosis(); yield true; }
-                case 2 -> { addTreatment(); yield true; }
-                case 3 -> { updateMedicalHistory(); yield true; }
-                case 4 -> { logAllergy(); yield true; }
-                case 5 -> { addNote(); yield true; }
-                case 0 -> false;
-                default -> {
-                    System.out.println("Invalid option. Please try again.");
-                    yield true;
-                }
-            };
-        } catch (Exception e) {
-            System.out.println(ERROR_PREFIX + e.getMessage());
-            return true;
-        }
-    }
-
-    private void addDiagnosis() {
-        String diagnosis = getMultiLineInput("Enter diagnosis (press Enter twice to finish):");
-        consultation.provideDiagnosis(diagnosis);
-        System.out.println("Diagnosis added" + SUCCESS_SUFFIX);
-    }
-
-    private void addTreatment() {
-        String treatment = getMultiLineInput("Enter treatment plan (press Enter twice to finish):");
-        consultation.addTreatment(treatment);
-        System.out.println("Treatment added" + SUCCESS_SUFFIX);
-    }
-
-    private void updateMedicalHistory() {
-        String history = getMultiLineInput("Enter medical history update (press Enter twice to finish):");
-        consultation.updateMedicalHistory(history);
-        System.out.println("Medical history updated" + SUCCESS_SUFFIX);
-    }
-
-
-private void logAllergy() {
-        String allergy = getStringInput("Enter allergy information: ");
-        consultation.logAllergy(allergy);
-        System.out.println("Allergy logged" + SUCCESS_SUFFIX);
-    }
-
-    private void addNote() {
-        String note = getMultiLineInput("Enter note (press Enter twice to finish):");
-        consultation.addNote(note);
-        System.out.println("Note added" + SUCCESS_SUFFIX);
-    }
-
-    private String getStringInput(String prompt) {
-        System.out.print(prompt);
-        String input = scanner.nextLine().trim();
-        if (input.isEmpty()) {
-            throw new IllegalArgumentException("Input cannot be empty");
-        }
-        return input;
-    }
-
-    private String getMultiLineInput(String prompt) {
-        System.out.println(prompt);
-        StringBuilder input = new StringBuilder();
-        String line;
-        while (!(line = scanner.nextLine()).isEmpty()) {
-            input.append(line).append("\n");
-        }
-        String result = input.toString().trim();
-        if (result.isEmpty()) {
-            throw new IllegalArgumentException("Input cannot be empty");
-        }
-        return result;
-    }
-
-    private int getIntInput(String prompt) {
-        String input = getStringInput(prompt);
-        try {
-            return Integer.parseInt(input);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Please enter a valid number");
-        }
-    }
-
-    private boolean confirmAction(String action) {
-        return getStringInput("Do you want to " + action + "? (y/n): ")
-            .toLowerCase()
-            .startsWith("y");
-    }
-
-    public void close() {
-        if (scanner != null) {
-            scanner.close();
-        }
-    }
-
-    public Consultation getConsultation() {
-        return consultation;
-    }
 }
