@@ -27,7 +27,7 @@ public class DoctorMenu {
                 System.out.println("Please enter a valid number.");
                 choice = 0;
             }
-        } while (choice != 5);
+        } while (choice != 6);
     }
 
     private void processMenuChoice(int choice) {
